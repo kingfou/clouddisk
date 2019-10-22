@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stagb Admin Template</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link href="/semantic/dist/semantic.min.css" rel="stylesheet" />
+    <link href="/plugins/ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <link href="/css/main.css" rel="stylesheet" />
+    <link href="/plugins/pacejs/pace.css" rel="stylesheet" />
+    
+</head>
+<body>
+    <div id="contextWrap">
+        <!--sidebar-->
+        <div class="ui sidebar vertical left menu overlay  borderless visible sidemenu inverted  grey" style="-webkit-transition-duration: 0.1s; transition-duration: 0.1s;" data-color="grey">
+            <a class="item logo" href="index.html">
+                <img src="/img/logo.png" alt="stagblogo" /><img src="/img/thumblogo.png" alt="stagblogo" class="displaynone" />
+            </a>
+            <div class="ui accordion inverted">
+
+                <a class="title item">
+                    <i class="ion-speedometer titleIcon icon"></i> 我的云端硬盘 <i class="dropdown icon"></i>
+                </a>
+                <div class="content">
+                    <a class="item" href="index.html">fold name #0 </a>
+                    <a class="item" href="index.html">fold name #1 </a>
+                    <a class="item" href="index.html">fold name #2 </a>
+                    <a class="item" href="index.html">fold name #3 </a>
+                </div>
+            </div>
+
+
+            <div class="ui divider"></div>
+            <a class="item" href="typography.html">
+                <i class="ion-printer icon"></i> <span class="colhidden">与我共享</span>
+            </a>
+            <a class="item" href="document.html">
+                <i class="ion-code icon"></i> <span class="colhidden">我最近用过</span>
+            </a>
+            <a class="item" href="document.html">
+                    <i class="ion-code icon"></i> <span class="colhidden">回收站</span>
+            </a>
+   
+            <div class="ui divider"></div>
+            
+            <a class="item">
+                <div class="ui inverted progress tiny teal" id="sidebar_progress2">
+                    <div class="bar">
+                        
+                    </div>
+                    <div class="label colhidden" style="margin-top: 10px"><span class="colhidden">Disk Space Usage</span></div>
+                </div>
+
+            </a>
+            <div class="ui divider"></div>
+
+            <a class="item hiddenCollapse">
+                
+        </div>
+        <!--sidebar-->
+        
+        <div class="pusher">
+            <!--navbar-->
+            <div class="navslide navwrap">
+                <div class="ui menu icon borderless grid" data-color="inverted white">
+                    <a class="item labeled openbtn">
+                        <i class="ion-navicon-round big icon"></i>
+                    </a>
+                    <a class="item labeled expandit" onclick="toggleFullScreen(document.body)">
+                        <i class="ion-arrow-expand big icon"></i>
+                    </a>
+                    <div class="item ui colhidden">
+                        <div class="ui icon input">
+                            <input type="text" placeholder="Search...">
+                            <i class="search icon"></i>
+                        </div>
+                    </div>
+                    <div class="right menu colhidden">
+
+                        <div class="ui dropdown item labeled icon">
+                            <i class="bell icon"></i>
+                            <div class="ui red label mini circular">1</div>
+                            <div class="menu">
+                                <div class="header">
+                                   通知
+                                </div>
+                                <div class="item">
+                                    <img class="ui avatar image" src="/img/avatar/people/enid.png" alt="label-image" /> Janice Robinson
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <!-- <div class="ui dropdown item">
+                            Language <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <a class="item"><i class="united kingdom flag"></i>English</a>
+                                <a class="item"><i class="turkey flag"></i>Turkish</a>
+                                <a class="item"><i class="spain flag"></i>Spanish</a>
+                            </div>
+                        </div> -->
+                        <div class="ui dropdown item">
+                            <img class="ui mini circular image" src="/img/avatar/people/enid.png" alt="label-image" />
+                            <div class="menu">
+                                <a class="item" href="mail.html">Inbox</a>
+                                <a class="item" href="profile.html">Profile</a>
+                                <a class="item" href="settings.html">Settings</a>
+                                <div class="ui divider"></div>
+                                <a class="item">Need Help?</a>
+                                <a class="item" href="login.html">Sign Out</a>
+                            </div>
+                        </div>
+                        <!-- <a class="item labeled rightsidebar computer only">
+                            <i class="ion-wrench large icon"></i>
+                        </a> -->
+
+                    </div>
+                </div>
+            </div>
+            <!--navbar-->
+            <!--maincontent-->
+        <div class="mainWrap navslide">
+            <div class="ui equal width left aligned padded grid stackable">
+                <!--Site Content-->
+                <!--Site Content-->
+                <div class="row">
+                    <div class="sixteen wide column">
+                        <div class="ui segments">
+                            <div class="ui segment">
+                                    <div class="ui menu icon borderless grid" data-color="inverted white">
+                                        <div class="ui dropdown item">
+                                                <!-- <img class="ui mini circular image" src="img/avatar/people/enid.png" alt="label-image" /> -->
+                                                <h3 head> 我的云端硬盘</h3>
+                                                <div class="menu">
+                                                    <a class="item" href="#">新建文件</a>
+                                                    <a class="item" href="#">新建文件夹</a>
+                                                    <a class="item" href="#">上传文件</a>
+                                                    <a class="item" href="#">上传文件夹</a>
+                                                </div>
+                                            </div>
+                                            <div class="right menu colhidden">
+                                                <div class="ui dropdown item labeled icon">
+                                                    <!-- <i class="bell icon"></i> -->
+                                                    <h3 head> 删除</h3>
+                                                </div>
+                                                <div class="ui dropdown item">
+                                                    <!-- <img class="ui mini circular image" src="img/avatar/people/enid.png" alt="label-image" /> -->
+                                                    <h3 head> 信息</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </div>
+
+                            <div class="ui segment">
+                                <table id="data_table"  class=" celled table "   cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>名称</th>
+                                            <th>所有者</th>
+                                            <th>上次修改日期</th>
+                                            <th>文件大小</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr data = 0>
+                                            <td><i class="ion-speedometer titleIcon icon"></i>电影</td>
+                                            <td>我</td>
+                                            <td>2018年6月9日</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr data = 1>
+                                            <td>Test.docs</td>
+                                            <td>我</td>
+                                            <td>2018年6月9日</td>
+                                            <td>1GB</td>
+                                        </tr>
+                                        <tr data = 2>
+                                            <td>Test.docs</td>
+                                            <td>我</td>
+                                            <td>2018年6月9日</td>
+                                            <td>2GB</td>
+                                        </tr>
+                                        <tr data = 3>
+                                            <td>Test.docs</td>
+                                            <td>我</td>
+                                            <td>2018年6月9日</td>
+                                            <td>3GB</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--maincontent-->
+    </div>
+    </div>
+    <!--jquery-->
+    <script src="/js/jquery-2.1.4.min.js"></script>
+    <style type="text/css">
+        table		{ border:0;border-collapse:collapse;}
+        td	{ font:normal 12px/17px Arial;padding:2px;width:100px;}
+        th			{ font:bold 12px/17px Arial;text-align:left;padding:4px;border-bottom:1px solid #333;}
+        /* .even		{ background:#FFF38F;}  /* 偶数行样式*/
+        /* .odd		{ background:#FFFFEE;}  奇数行样式 */ 
+        .selected		{ background:rgb(120, 137, 214);color:#fff;}
+        </style>
+    <script type="text/javascript">
+        $(function(){
+            //   $("tbody>tr:odd").addClass("odd");
+            //   $("tbody>tr:even").addClass("even");
+              $('tbody>tr').click(function() {
+                  //判断当前是否选中
+                  var hasSelected=$(this).hasClass('selected');
+                  $(this)[hasSelected?"removeClass":"addClass"]('selected')
+                //   alert($(this).attr('data'))
+              });
+              // 如果复选框默认情况下是选择的，则高色.
+            //   $('tbody>tr:has(:checked)').addClass('selected');
+        })
+      </script>
+    <!--jquery-->
+    <!--semantic-->
+    <script src="/semantic/dist/semantic.min.js"></script>
+    <!--semantic-->
+<script src="/plugins/cookie/js.cookie.js"></script>
+    <script src="/plugins/nicescrool/jquery.nicescroll.min.js"></script>
+
+    <script data-pace-options='{ "ajax": false }' src="/plugins/pacejs/pace.js"></script>
+    <!-- <script src="plugins/datatable/jquery.dataTables.js"></script>
+    <script src="js/customjs/custom-datatable.js"></script> -->
+    <script src="/js/main.js"></script>
+  
+</body>
+</html>
