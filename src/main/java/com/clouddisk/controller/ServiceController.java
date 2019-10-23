@@ -38,7 +38,7 @@ public class ServiceController {
     BookDao bookdao;
     BufferedWriter bw=null;
     @Resource
-    private XmltableService xmltableService; //自动的将实例注入了。我们直接调用接口即可。
+    private XmltableService xmltableService; //自动的将实例注入了。
 
 
     @Resource
@@ -51,83 +51,6 @@ public class ServiceController {
     }
 
 
-
-    @RequestMapping("/calloc")
-    public String calloc(Model model){
-        System.out.print("calloc");
-        Book book=bookdao.selectBookByAuthor("林金福");
-        model.addAttribute("book",book);
-        System.out.print(book.getName());
-        System.out.print("hello world");
-        return "calloc";
-    }
-
-
-    @RequestMapping("/search")
-    public String search(Model model,XmlTable xmlTable1){ //模型驱动的时候，会自动的注入到这个对应的pojo。
-
-
-
-        //获取查询的方式： 按照名称，按照功能，按照需求 进行处理
-
-        String serach_name= xmlTable1.getSearchname();
-
-        List<XmlTable> xmlTable2=null;  //记录查询发挥的数据：
-
-        if("byname".equals(serach_name)){
-            //按照名称进行查询：
-            xmlTable2=xmltableService.getAllMessageByName(xmlTable1.getName());
-            System.out.println(xmlTable2.size());
-
-        }else{
-            xmlTable2=xmltableService.getAllMessageByUsage(xmlTable1.getFusage());
-
-        }
-
-        model.addAttribute("xmltable2",xmlTable2);
-        model.addAttribute("xmltable1",xmlTable1);
-        System.out.print(xmlTable1.getSearchname());
-        return "search_result";
-
-
-
-
-
-
-
-
-
-    }
-
-    @RequestMapping("/mapping")
-    public String mapping(Model model,String name) throws IOException{
-        System.out.print(name);
-        try{bw=new BufferedWriter(new FileWriter("input.log",true));}catch (IOException e){
-            System.out.print(e);
-        }
-        bw.write(name);
-        bw.newLine();
-        bw.flush();
-        bw.close();
-        XmlTable allmsg=xmltableService.getOneMessageByName(name);
-
-        XmlTable xmlTable=null;
-        if(allmsg!=null){
-            xmlTable=allmsg;
-            String function=xmlTable.getFunction();
-            function=function.replace("<", "&lt");
-            function=function.replace(">", "&gt;");
-            xmlTable.setFunction(function);
-        }
-
-
-
-        model.addAttribute("xmltable",xmlTable);
-        //页面上的问题基本全是由于数据库中字符的带有一些 <>,<.H>等造成的。
-
-
-        return "calloc";
-    }
 
 
 
