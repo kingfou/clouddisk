@@ -8,24 +8,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="css/bootstrapv3.min.css"> -->
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    
     <!-- Fontastic Custom icon font-->
-    <link rel="stylesheet" href="/css/fontastic.css">
-    <script src="/js/jquery-2.1.4.min.js"></script>
+    <link rel="stylesheet" href="css/fontastic.css">
+    <script src="js/jquery-2.1.4.min.js"></script>
     <!-- Google fonts - Roboto -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
     <!-- jQuery Circle-->
-    <link rel="stylesheet" href="/css/grasp_mobile_progress_circle-1.0.0.min.css">
+    <link rel="stylesheet" href="css/grasp_mobile_progress_circle-1.0.0.min.css">
     <!-- Custom Scrollbar-->
-    <link rel="stylesheet" href="/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="/css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="css/custom.css">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="shortcut icon" href="img/favicon.ico">
     <style type="text/css">
         table {
             border: 0;
@@ -72,6 +74,7 @@
             $(".popover-options a").popover({html: true});
         });
     </script>
+
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -83,7 +86,7 @@
         <!-- Sidebar Header    -->
         <div class="sidenav-header d-flex align-items-center justify-content-center">
             <!-- User Info-->
-            <div class="sidenav-header-inner text-center"><img src="/img/avatar-7.jpg" alt="person"
+            <div class="sidenav-header-inner text-center"><img src="img/avatar-7.jpg" alt="person"
                                                                class="img-fluid rounded-circle">
                 <h2 class="h5">Nathan Andrews</h2><span>Web Developer</span>
             </div>
@@ -159,6 +162,8 @@
 
         </div>
     </div>
+    
+
     <section>
         <div class="container-fluid">
             <!-- Page Header-->
@@ -201,13 +206,26 @@
                         <td><input type="button" value="Del"></input></td>
 
                     </tr>
+                    <tr>
+                            <th scope="row"><input type="checkbox"/></th>
+                            <td>filename</td>
+                            <td>2019-02-03</td>
+                            <td>26.8kb</td>
+                            <td><input type="button" value="down"></input></td>
+                            <td><input type="button" value="Del"></input></td>
+    
+                        </tr>
                     </tbody>
                 </table>
+            
             </div>
 
         </div>
-    </section>
+        <div class="mx-auto bg-warning" style="width:600px">
+            <ul class="pagination" id="pagination" >
+        </ul></div>
 
+    </section>
 
     <div class="modal fade" id="uploadFold" tabindex="-1" role="dialog" aria-labelledby="uploadFoldLabel"
          aria-hidden="true">
@@ -264,32 +282,57 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
+
+    
+
+
+
     <footer class="main-footer">
+           
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
                     <p>Bootstrapious All rights reserved. &copy; 2017-2019</p>
                 </div>
                 <div class="col-sm-6 text-right">
-
                 </div>
             </div>
         </div>
+        
     </footer>
 </div>
 
+<script>
+    $(function () {
+        window.pagObj = $('#pagination').twbsPagination({
+            totalPages: 35,
+            visiblePages: 10,
+            onPageClick: function (event, page) {
+                console.info(page + ' (from options)');
+            }
+        }).on('page', function (event, page) {
+            console.info(page + ' (from event listening)');
+        });
+    });
+
+</script>
 
 <!-- JavaScript files-->
-<script src="/vendor/jquery/jquery.min.js"></script>
-<script src="/vendor/popper.js/umd/popper.min.js"></script>
-<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
-<script src="/vendor/jquery.cookie/jquery.cookie.js"></script>
-<script src="/vendor/chart.js/Chart.min.js"></script>
-<script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
-<script src="/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="/js/charts-home.js"></script>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/popper.js/umd/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/jquery.twbsPagination.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<script src="js/jquery.twbsPagination.js" type="text/javascript"></script>
+<!-- <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script> -->
+<script src="js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js"></script>
+<script src="vendor/chart.js/Chart.min.js"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/charts-home.js"></script>
 <!-- Main File-->
-<script src="/js/front.js"></script>
+<script src="js/front.js"></script>
 </body>
 </html>
