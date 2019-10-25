@@ -1,5 +1,12 @@
 package com.clouddisk.dao;
 
+
+import com.clouddisk.domain.Folders;
+import org.beetl.sql.core.annotatoin.Param;
+import org.beetl.sql.core.annotatoin.SqlResource;
+
+import java.util.List;
+
 /*
                           _ooOoo_
                          o8888888o
@@ -22,5 +29,9 @@ package com.clouddisk.dao;
        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         author : kingfoulin    
        */
+
+@SqlResource("Folders")
 public interface FoldersDao {
+    public Folders getFolderByFolderId(@Param("folderId") Integer folderId);
+    public List<Folders> getAllFoldersByUserId(@Param("userId") Integer userId);
 }

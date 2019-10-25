@@ -24,21 +24,21 @@ import java.util.Date;
        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         author : kingfou lin
        */
-public class Files {
+public class FilesInfo {
     private String name;
     private Double size;
-    private int fileId;
-    private int user_Id;
-    private int folder_Id;
+    private Integer fileId;
+    private Integer user_Id;
+    private Integer folder_Id;
     private Date uploaddate;
     private String path;
 
 
-    public int getFolderId() {
+    public Integer getFolderId() {
         return folder_Id;
     }
 
-    public void setFolderId(int folderId) {
+    public void setFolderId(Integer folderId) {
         this.folder_Id = folderId;
     }
     public String getName() {
@@ -58,19 +58,19 @@ public class Files {
     }
 
 
-    public int getFileId() {
+    public Integer getFileId() {
         return fileId;
     }
 
-    public void setFileId(int fileId) {
+    public void setFileId(Integer fileId) {
         this.fileId = fileId;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return user_Id;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.user_Id = userId;
     }
 

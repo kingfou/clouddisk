@@ -1,8 +1,12 @@
 package com.clouddisk.service;
 
-import com.clouddisk.dao.FIlesInfoDao;
+import com.clouddisk.dao.FilesInfoDao;
 import com.clouddisk.domain.FilesInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /*
                           _ooOoo_
@@ -26,14 +30,40 @@ import org.springframework.beans.factory.annotation.Autowired;
        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         author : kingfoulin    
        */
-public class FilesInofImp implements FilesInfoService {
+
+@Service
+public class FilesInfoServiceImp implements FilesInfoService {
 
     @Autowired
-    FIlesInfoDao fIlesInfoDao;
+    FilesInfoDao filesInfoDao;
 
+    ApplicationContext applicationContext;
     @Override
     public boolean InserFilesInfo(FilesInfo filesInfo) {
-        fIlesInfoDao.insert(filesInfo);
+
+        filesInfoDao.insert(filesInfo);
         return true;
+    }
+
+    @Override
+    public List<FilesInfo> getAllFilesInfoByUserId(Integer userId) {
+        return filesInfoDao.getAllFilesInfoByUserId(userId);
+    }
+
+    @Override
+    public boolean deleteFileByFileId(Integer fileId) {
+        FilesInfo filesInfo = filesInfoDao.getFilesInfoByFileId(fileId);
+        return filesInfoDao.deleteById(filesInfo)>0;
+
+    }
+
+    @Override
+    public List<FilesInfo> getAllFilesInfoByFolderId(Integer folderId) {
+        return filesInfoDao.getAllFilesInfoByFolderId(folderId);
+    }
+
+    @Override
+    public List<FilesInfo> getNoFoldFilesByUserId(Integer userId) {
+        return filesInfoDao.getNoFoldFilesByUserId(userId);
     }
 }

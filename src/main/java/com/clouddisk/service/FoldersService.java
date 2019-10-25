@@ -1,5 +1,9 @@
 package com.clouddisk.service;
 
+import com.clouddisk.domain.Folders;
+
+import java.util.List;
+
 /*
                           _ooOoo_
                          o8888888o
@@ -23,4 +27,7 @@ package com.clouddisk.service;
         author : kingfoulin    
        */
 public interface FoldersService {
+    public Folders getFolderByFolderId(Integer folderId);
+    public List<Folders> getAllFoldersByUserId(Integer userId);
+
 }

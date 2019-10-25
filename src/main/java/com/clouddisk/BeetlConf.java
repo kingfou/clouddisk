@@ -84,13 +84,13 @@ public class BeetlConf {
     @Bean(name = "datasource")
     public DataSource getDataSource() {
         return DataSourceBuilder.create()
-                .url("jdbc:mysql://125.216.242.144:3306/clouddisk?" +
+                .url("jdbc:mysql://125.216.241.66:3306/clouddisk?" +
                         "useUnicode=true" +
                         "&useJDBCCompliantTimezoneShift=true" +
                         "useSSL=false"+
                         "&useLegacyDatetimeCode=false&serverTimezone=UTC")
-                .username("teamipv6")
-                .password("teamipv6")
+                .username("root")
+                .password("")
                 .build();
     }
 

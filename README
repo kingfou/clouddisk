@@ -1,7 +1,13 @@
 
  1. html的路径从 / 开始 ，例如 /js/example.js ，/css/example.css 自动以static为根目录。
  
- 2. 采用的是springboot+beetl+beetl SQL的开发模板。 
+ 2. 采用的是springboot+beetl+beetl SQL的开发模板。
+
+ 3. 数据库名称：采用驼峰命名，多个单词之间采用 "_" 隔开。
+
+ 4. 字段，多个单词之间采用 "_" 隔开。
+
+ 5. html页面中的属性的 "_" 要省略。
  
  
 

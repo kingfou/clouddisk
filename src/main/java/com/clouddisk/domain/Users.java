@@ -1,13 +1,24 @@
 package com.clouddisk.domain;
 
 
+import org.beetl.sql.core.TailBean;
+
 import java.io.Serializable;
 
-public class Users implements Serializable {
+public class Users extends TailBean {
     public String name;
     public String password;
     public String email;
     public String stu_numb;
+    public Integer userId;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return name;

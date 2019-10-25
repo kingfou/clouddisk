@@ -22,5 +22,17 @@ package com.clouddisk.service;
        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         author : kingfoulin    
        */
+
+import com.clouddisk.domain.FilesInfo;
+
+import java.util.List;
+
+
 public interface FilesInfoService {
+    public boolean InserFilesInfo(FilesInfo filesInfo);
+    List<FilesInfo> getAllFilesInfoByUserId(Integer userId);
+    List<FilesInfo> getNoFoldFilesByUserId(Integer userId);
+    public boolean deleteFileByFileId(Integer fileId);
+    List<FilesInfo> getAllFilesInfoByFolderId(Integer folderId);
+
 }

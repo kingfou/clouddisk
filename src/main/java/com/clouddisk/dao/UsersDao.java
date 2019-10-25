@@ -6,7 +6,7 @@ import org.beetl.sql.core.annotatoin.Param;
 import org.beetl.sql.core.annotatoin.SqlResource;
 import org.beetl.sql.core.mapper.BaseMapper;
 
-@SqlResource("users")
+@SqlResource("Users")
 public interface UsersDao extends BaseMapper<Users> {
 
     public Users getUserById(@Param("userId")Integer userId);
