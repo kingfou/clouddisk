@@ -5,6 +5,7 @@ import com.clouddisk.domain.*;
 import com.clouddisk.service.FilesInfoService;
 import com.clouddisk.service.FoldersService;
 import com.clouddisk.service.UserInfoService;
+import org.beetl.sql.core.engine.PageQuery;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,27 +52,30 @@ public class ServiceController {
 
 
     @RequestMapping(value = "/loginCheck")
-    public String logIn(Model model, String stuNumb,String password) {
+    public String logIn(Model model, String stuNumb,String password,PageQuery pageQuery) {
         Users user;
         if (userInfoService.getUserByUserNameAndPassword(stuNumb, password) != null){
             user  = new Users();
-            return showFolders(model,user);}
+            return showFolders(model,user,pageQuery);}
         else {
             return "login";
         }
     }
 
     @RequestMapping("/showfolders")
-    public String showFolders(Model model, Users user) {
+    public String showFolders(Model model, Users user,PageQuery pageQuery) {
         user.setUserId(1);
 
+        pageQuery.setPageSize(5);
         List<Folders> allfolders = foldersService.getAllFoldersByUserId(1);
-        List<FilesInfo> noInFoldFiles;
-        noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(user.getUserId());
+        PageQuery<FilesInfo> noInFoldFiles;
+        noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery,user.getUserId());
 
         model.addAttribute("allfolders", allfolders);
-        model.addAttribute("noInFoldFiles", noInFoldFiles);
+        model.addAttribute("noInFoldFiles", noInFoldFiles.getList());
         model.addAttribute("user", user);
+        model.addAttribute("pageQuery",pageQuery);
+
         return "index";
     }
 
@@ -88,7 +92,7 @@ public class ServiceController {
 
 
     @RequestMapping(value = "/uploadfile")
-    public String uploadFile(Model model, @RequestParam("uploadfile") MultipartFile file, Users user) throws Exception {
+    public String uploadFile(Model model, @RequestParam("uploadfile") MultipartFile file, Users user,PageQuery pageQuery) throws Exception {
         if (file == null) {
             System.out.print("file is null...");
         } else {
@@ -116,10 +120,10 @@ public class ServiceController {
         }
 
         List<Folders> allfolders = foldersService.getAllFoldersByUserId(1);
-        List<FilesInfo> noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(user.getUserId());
+        PageQuery<FilesInfo> noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery,user.getUserId());
 
         model.addAttribute("allfolders", allfolders);
-        model.addAttribute("noInFoldFiles", noInFoldFiles);
+        model.addAttribute("noInFoldFiles", noInFoldFiles.getList());
         model.addAttribute("user", user);
         return "index";
     }

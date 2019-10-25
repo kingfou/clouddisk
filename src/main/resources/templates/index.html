@@ -193,7 +193,7 @@
                         <th scope="row"><input type="checkbox"/></th>
                         <td><a href="/home/showfiles?folderId=${folder.folderId}">${folder.name}</a></td>
                         <td>${folder.uploaddate}</td>
-                        <td>${folder.size} Kb </td>
+                        <td>${folder.size} Kb</td>
                         <td><input type="button" value="down" disabled="disabled"/></td>
                         <td><input type="button" value="Del"/></td>
                     </tr>
@@ -209,7 +209,7 @@
                         <th scope="row"><input type="checkbox"/></th>
                         <td>${folder.name}</td>
                         <td>${folder.uploaddate}</td>
-                        <td>${folder.size} Kb </td>
+                        <td>${folder.size} Kb</td>
                         <td><input type="button" value="down"/></td>
                         <td><input type="button" value="Del"/></td>
                     </tr>
@@ -220,11 +220,12 @@
                 </table>
             </div>
 
-            
+
         </div>
         <div class="mx-auto bg-warning" style="width:600px">
-            <ul class="pagination" id="pagination" >
-        </ul></div>
+            <ul class="pagination" id="pagination">
+            </ul>
+        </div>
     </section>
 
 
@@ -272,19 +273,19 @@
 
                     <div class="modal-body">
                         <form id="upload-form" action="/home/uploadfile" method="post"
-                            enctype="multipart/form-data">
+                              enctype="multipart/form-data">
                             <input type="file" id="upload" name="uploadfile"/>
                             <input type="hidden" name="userId" value=${user.userId}>
                             <input type="submit" value="上传">
                         </form>
                     </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                    关闭
-                    <input class="btn btn-primary" type="submit" value="上传">
-                   
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            关闭
+                            <input class="btn btn-primary" type="submit" value="上传">
+
+                    </div>
+                </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
@@ -305,15 +306,15 @@
                 <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
 
                     <div class="modal-body">
-                        　　输入文件名字：　<input  id="upload" name="upload"/>
+                        　　输入文件名字：　<input id="upload" name="upload"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                         </button>
 
-                         <input class = "btn btn-primary" type="submit" value="提交"/>
+                        <input class="btn btn-primary" type="submit" value="提交"/>
                     </div>
-            </form>
+                </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
@@ -332,15 +333,15 @@
                 <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
 
                     <div class="modal-body">
-                        　　输入文件夹名字：　<input  id="upload" name="upload"/>
+                        　　输入文件夹名字：　<input id="upload" name="upload"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                         </button>
 
-                         <input class = "btn btn-primary" type="submit" value="提交"/>
+                        <input class="btn btn-primary" type="submit" value="提交"/>
                     </div>
-            </form>
+                </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
@@ -358,19 +359,27 @@
             </div>
         </div>
 
+        <form id="pageFlash-form" action="/home/showfolders" method="post"
+              enctype="application/x-www-form-urlencoded" type="hidden">
+            <input  name="userId" value=${user.userId}>
+            <input id="pageNumber" name="pageNumber" value=${pageQuery.pageNumber}>
+        </form>
+
     </footer>
 </div>
 
 <script>
     $(function () {
         window.pagObj = $('#pagination').twbsPagination({
-            totalPages: 35,
-            visiblePages: 10,
+            totalPages: '${pageQuery.totalPage}',
+            visiblePages: '${pageQuery.pageSize}',
+            startPage:'${pageQuery.pageNumber}',
             onPageClick: function (event, page) {
-                console.info(page + ' (from options)');
+
             }
         }).on('page', function (event, page) {
-            console.info(page + ' (from event listening)');
+            $("#pageNumber").val(page);
+            $("#pageFlash-form").submit();
         });
     });
 

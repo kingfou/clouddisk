@@ -2,6 +2,7 @@ package com.clouddisk.service;
 
 import com.clouddisk.dao.FilesInfoDao;
 import com.clouddisk.domain.FilesInfo;
+import org.beetl.sql.core.engine.PageQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,7 @@ public class FilesInfoServiceImp implements FilesInfoService {
     }
 
     @Override
-    public List<FilesInfo> getNoFoldFilesByUserId(Integer userId) {
-        return filesInfoDao.getNoFoldFilesByUserId(userId);
+    public PageQuery<FilesInfo> getNoFoldFilesByUserId(PageQuery pageQuery,Integer userId) {
+        return filesInfoDao.getNoFoldFilesByUserId(pageQuery,userId);
     }
 }

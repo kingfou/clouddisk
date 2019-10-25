@@ -24,6 +24,7 @@ package com.clouddisk.service;
        */
 
 import com.clouddisk.domain.FilesInfo;
+import org.beetl.sql.core.engine.PageQuery;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
 public interface FilesInfoService {
     public boolean InserFilesInfo(FilesInfo filesInfo);
     List<FilesInfo> getAllFilesInfoByUserId(Integer userId);
-    List<FilesInfo> getNoFoldFilesByUserId(Integer userId);
+    PageQuery<FilesInfo> getNoFoldFilesByUserId(PageQuery pageQuery,Integer userId);
     public boolean deleteFileByFileId(Integer fileId);
     List<FilesInfo> getAllFilesInfoByFolderId(Integer folderId);
 

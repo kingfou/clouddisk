@@ -13,4 +13,11 @@ select * from Files_Info where folder_Id= #folderId#
 
 getNoFoldFilesByUserId
 ===
-select * from Files_Info where user_Id= #userId# and folder_Id = ""
+select 
+@pageTag() {  
+    * 
+@}
+from Files_Info where user_Id= #userId# and folder_Id is NULL
+
+
+
