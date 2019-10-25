@@ -64,7 +64,7 @@
             <h2 class="h5">Nathan Andrews</h2><span>Web Developer</span>
           </div>
           <!-- Small Brand information, appears on minimized sidebar-->
-          <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>B</strong><strong class="text-primary">D</strong></a></div>
+          <div class="sidenav-header-logo"><a href="/home/showfolders" class="brand-small text-center"> <strong>B</strong><strong class="text-primary">D</strong></a></div>
         </div>
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">
@@ -73,8 +73,13 @@
               <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> 
                 <i class="icon-interface-windows"></i>我的云端硬盘 </a>
                 <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
-                  <li><a href="#">fold one</a></li>
-                  <li><a href="#">fold two</a></li>
+                  <%
+                  for(folder in allfolders){
+                  %>
+                  <li><a href="/home/showfiles?folderId=${folder.folderId}">${folder.name}</a></li>
+                  <%
+                  }
+                  %>
                 </ul>
               </li>                
             <li><a href="index.html"> <i class="icon-picture"></i>共享</a></li>
@@ -91,7 +96,7 @@
         <nav class="navbar">
           <div class="container-fluid">
             <div class="navbar-holder d-flex align-items-center justify-content-between">
-              <div class="navbar-header"><a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand">
+              <div class="navbar-header"><a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="/home/showfolders" class="navbar-brand">
                   <div class="brand-text d-none d-md-inline-block"><span>Drive </span><strong class="text-primary">Dashboard</strong></div></a></div>
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
 
@@ -111,15 +116,19 @@
         <div class="container-fluid">
             
           <ul class="breadcrumb">
-            <li class="breadcrumb-item "><a href="index.html">我的云端硬盘</a></li>
+            <li class="breadcrumb-item "><a href="/home/showfolders">我的云端硬盘</a></li>
             <li class="breadcrumb-item  dropdown "><a id="languages" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="language dropdown-toggle">
                 Tables
             </a> 
             <ul aria-labelledby="languages" class="dropdown-menu">
               <input type="text" value="" width="100" style="display: None;"/>
-                <li><a rel="nofollow" href="#" class="dropdown-item " data-toggle="modal" data-target="#uploadFile"> <span>上传文件</span></a></li>
-                <li><a rel="nofollow" href="#" class="dropdown-item" data-toggle="modal" data-target="#uploadFold"> <span>上传文件夹</span></a></li>
-                
+              <%
+              for(folder in allfolders){
+              %>
+              <li><a href="/home/showfiles?folderId=${folder.folderId}">${folder.name}</a></li>
+              <%
+              }
+              %>
               </ul>
           </li>
 
@@ -144,32 +153,22 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row"><input type="checkbox"/></th>
-                      <td>filename</td>
-                      <td>2019-02-03</td>
-                      <td>26.8kb</td>
-                      <td><input type="button" value="down"></input></td>
-                      <td><input type="button" value="Del"></input></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><input type="checkbox"/></th>
-                      <td>filename</td>
-                      <td>2019-02-03</td>
-                      <td>26.8kb</td>
-                      <td><input type="button" value="down"></input></td>
-                      <td><input type="button" value="Del"></input></td>
+                  <!--- 内容展示 -->
+                  <%
+                  for(file in allfiles){
 
-                    </tr>
-                    <tr>
-                      <th scope="row"><input type="checkbox"/></th>
-                      <td>filename</td>
-                      <td>2019-02-03</td>
-                      <td>26.8kb</td>
-                      <td><input type="button" value="down"></input></td>
-                      <td><input type="button" value="Del"></input></td>
-
-                    </tr>
+                  %>
+                  <tr>
+                    <th scope="row"><input type="checkbox"/></th>
+                    <td>${file.name}</td>
+                    <td>${file.uploaddate}</td>
+                    <td>${file.size} Kb </td>
+                    <td><input type="button" value="down"></input></td>
+                    <td><input type="button" value="Del"></input></td>
+                  </tr>
+                  <%
+                  }
+                  %>
                   </tbody>
                 </table>
           </div>
