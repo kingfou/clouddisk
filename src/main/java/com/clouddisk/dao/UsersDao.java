@@ -10,4 +10,5 @@ import org.beetl.sql.core.mapper.BaseMapper;
 public interface UsersDao extends BaseMapper<Users> {
 
     public Users getUserById(@Param("userId")Integer userId);
+    public Users getUserByUserNameAndPassword(@Param("stu_Numb")String stu_Numb,@Param("password") String password);
 }

@@ -3,13 +3,11 @@ package com.clouddisk.domain;
 
 import org.beetl.sql.core.TailBean;
 
-import java.io.Serializable;
-
 public class Users extends TailBean {
     public String name;
     public String password;
     public String email;
-    public String stu_numb;
+    public String stu_Numb;
     public Integer userId;
 
     public Integer getUserId() {
@@ -44,11 +42,11 @@ public class Users extends TailBean {
         this.email = email;
     }
 
-    public String getStu_numb() {
-        return stu_numb;
+    public String getStu_Numb() {
+        return stu_Numb;
     }
 
-    public void setStu_numb(String stu_numb) {
-        this.stu_numb = stu_numb;
+    public void setStu_Numb(String stu_Numb) {
+        this.stu_Numb = stu_Numb;
     }
 }

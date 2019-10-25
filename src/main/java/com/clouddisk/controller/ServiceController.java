@@ -44,6 +44,23 @@ public class ServiceController {
     @Resource
     private FoldersService foldersService;
 
+    @RequestMapping(value = "/loginPage")
+    public String logInPage(){
+        return "login";
+    }
+
+
+    @RequestMapping(value = "/loginCheck")
+    public String logIn(Model model, String stuNumb,String password) {
+        Users user;
+        if (userInfoService.getUserByUserNameAndPassword(stuNumb, password) != null){
+            user  = new Users();
+            return showFolders(model,user);}
+        else {
+            return "login";
+        }
+    }
+
     @RequestMapping("/showfolders")
     public String showFolders(Model model, Users user) {
         user.setUserId(1);

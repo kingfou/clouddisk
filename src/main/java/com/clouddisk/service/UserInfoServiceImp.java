@@ -15,4 +15,9 @@ public class UserInfoServiceImp implements UserInfoService {
     public Users getUserById(Integer userId) {
         return userInfoDao.getUserById(userId);
     }
+
+    @Override
+    public Users getUserByUserNameAndPassword(String name, String password) {
+        return userInfoDao.getUserByUserNameAndPassword(name,password);
+    }
 }
