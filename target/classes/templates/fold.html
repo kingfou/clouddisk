@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Bootstrap Dashboard</title>
@@ -8,255 +8,370 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="css/bootstrapv3.min.css"> -->
     <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    
     <!-- Fontastic Custom icon font-->
     <link rel="stylesheet" href="css/fontastic.css">
-    <script src="/js/jquery-2.1.4.min.js"></script>
+    <script src="js/jquery-2.1.4.min.js"></script>
     <!-- Google fonts - Roboto -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
     <!-- jQuery Circle-->
-    <link rel="stylesheet" href="/css/grasp_mobile_progress_circle-1.0.0.min.css">
+    <link rel="stylesheet" href="css/grasp_mobile_progress_circle-1.0.0.min.css">
     <!-- Custom Scrollbar-->
-    <link rel="stylesheet" href="/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
     <!-- theme stylesheet-->
-    <link rel="stylesheet" href="/css/style.default.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="css/custom.css">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="shortcut icon" href="img/favicon.ico">
     <style type="text/css">
-        table		{ border:0;border-collapse:collapse;}
-        td	{ font:normal 12px/17px Arial;padding:2px;}
-        th			{ font:bold 12px/17px Arial;padding:4px;}
-        .selected		{ background:rgb(107, 128, 221);color:#fff;}
-        </style>
+        table {
+            border: 0;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 2px;
+        }
+
+        th {
+            padding: 4px;
+        }
+
+        .selected {
+            background: rgb(107, 128, 221);
+            color: #fff;
+        }
+    </style>
     <script type="text/javascript">
-        $(function(){
-              $('tbody>tr').click(function() {
-                  var hasSelected=$(this).hasClass('selected');
-                  $(this)[hasSelected?"removeClass":"addClass"]('selected').find(':checkbox').attr('checked', !hasSelected)                  
-              });
-              $('tbody>tr:has(:checked)').addClass('selected');
-              
+        $(function () {
+            $('tbody>tr').click(function () {
+                var hasSelected = $(this).hasClass('selected');
+                $(this)[hasSelected ? "removeClass" : "addClass"]('selected').find(':checkbox').attr('checked', !hasSelected)
+            });
+            $('tbody>tr:has(:checked)').addClass('selected');
+
         })
-      </script>
-          <script>
-              $(function () { $('.popover-show').popover('show');});
-                      $(function () { $('.popover-hide').popover('hide');});
-                      $(function () { $('.popover-destroy').popover('destroy');});
-                      $(function () { $('.popover-toggle').popover('toggle');});
-                      $(function () { $(".popover-options a").popover({html : true });});
-              </script>
+    </script>
+    <script>
+        $(function () {
+            $('.popover-show').popover('show');
+        });
+        $(function () {
+            $('.popover-hide').popover('hide');
+        });
+        $(function () {
+            $('.popover-destroy').popover('destroy');
+        });
+        $(function () {
+            $('.popover-toggle').popover('toggle');
+        });
+        $(function () {
+            $(".popover-options a").popover({html: true});
+        });
+    </script>
+
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-  </head>
-  <body>
-    <!-- Side Navbar -->
-    <nav class="side-navbar">
-      <div class="side-navbar-wrapper">
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+</head>
+<body>
+<!-- Side Navbar -->
+<nav class="side-navbar">
+    <div class="side-navbar-wrapper">
         <!-- Sidebar Header    -->
         <div class="sidenav-header d-flex align-items-center justify-content-center">
-          <!-- User Info-->
-          <div class="sidenav-header-inner text-center"><img src="/img/avatar-7.jpg" alt="person" class="img-fluid rounded-circle">
-            <h2 class="h5">Nathan Andrews</h2><span>Web Developer</span>
-          </div>
-          <!-- Small Brand information, appears on minimized sidebar-->
-          <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>B</strong><strong class="text-primary">D</strong></a></div>
+            <!-- User Info-->
+            <div class="sidenav-header-inner text-center"><img src="img/avatar-7.jpg" alt="person"
+                                                               class="img-fluid rounded-circle">
+                <h2 class="h5">Nathan Andrews</h2><span>Web Developer</span>
+            </div>
+            <!-- Small Brand information, appears on minimized sidebar-->
+            <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center">
+                <strong>B</strong><strong class="text-primary">D</strong></a></div>
         </div>
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">
-          <h5 class="sidenav-heading">Main</h5>
-          <ul id="side-main-menu" class="side-menu list-unstyled">  
-              <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> 
-                <i class="icon-interface-windows"></i>我的云端硬盘 </a>
-                <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
-                  <li><a href="#">fold one</a></li>
-                  <li><a href="#">fold two</a></li>
-                </ul>
-              </li>                
-            <li><a href="index.html"> <i class="icon-picture"></i>共享</a></li>
-            <li><a href="forms.html"> <i class="icon-form"></i>已删除文件  </a></li>
-          
-          </ul>
+            <h5 class="sidenav-heading">Main</h5>
+            <ul id="side-main-menu" class="side-menu list-unstyled">
+                <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse">
+                    <i class="icon-interface-windows"></i>我的云端硬盘 </a>
+                    <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
+                        <li><a href="fold.html">fold one</a></li>
+                        <li><a href="#">fold two</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.html"> <i class="icon-picture"></i>共享</a></li>
+                <li><a href="index.html"> <i class="icon-form"></i>已删除文件 </a></li>
+
+            </ul>
         </div>
 
-      </div>
-    </nav>
-    <div class="page">
-      <!-- navbar-->
-      <header class="header">
+    </div>
+</nav>
+<div class="page">
+    <!-- navbar-->
+    <header class="header">
         <nav class="navbar">
-          <div class="container-fluid">
-            <div class="navbar-holder d-flex align-items-center justify-content-between">
-              <div class="navbar-header"><a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand">
-                  <div class="brand-text d-none d-md-inline-block"><span>Drive </span><strong class="text-primary">Dashboard</strong></div></a></div>
-              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+            <div class="container-fluid">
+                <div class="navbar-holder d-flex align-items-center justify-content-between">
+                    <div class="navbar-header"><a id="toggle-btn" href="#" class="menu-btn"><i
+                            class="icon-bars"> </i></a><a href="index.html" class="navbar-brand">
+                        <div class="brand-text d-none d-md-inline-block"><span>Drive </span><strong
+                                class="text-primary">Dashboard</strong></div>
+                    </a></div>
+                    <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
 
-                <li class="nav-item"><a href="login.html" class="nav-link logout"> <span class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out"></i></a></li>
-              </ul>
+                        <li class="nav-item"><a href="login.html" class="nav-link logout"> <span
+                                class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out"></i></a></li>
+                    </ul>
+                </div>
             </div>
-          </div>
         </nav>
-      </header>
+    </header>
 
 
+    <div class="breadcrumb-holder">
 
-
-      <div class="breadcrumb-holder">
-          
 
         <div class="container-fluid">
-            
-          <ul class="breadcrumb">
-            <li class="breadcrumb-item "><a href="index.html">我的云端硬盘</a></li>
-            <li class="breadcrumb-item  dropdown "><a id="languages" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="language dropdown-toggle">
-                Tables
-            </a> 
-            <ul aria-labelledby="languages" class="dropdown-menu">
-              <input type="text" value="" width="100" style="display: None;"/>
-                <li><a rel="nofollow" href="#" class="dropdown-item " data-toggle="modal" data-target="#uploadFile"> <span>上传文件</span></a></li>
-                <li><a rel="nofollow" href="#" class="dropdown-item" data-toggle="modal" data-target="#uploadFold"> <span>上传文件夹</span></a></li>
-                
-              </ul>
-          </li>
+
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item "><a href="index.html">我的云端硬盘</a></li>
+                <li class="breadcrumb-item  dropdown "><a id="languages" rel="nofollow" data-target="#" href="#"
+                                                          data-toggle="dropdown" aria-haspopup="true"
+                                                          aria-expanded="false" class="language dropdown-toggle">
+                    fold1
+                </a>
+                    <ul aria-labelledby="languages" class="dropdown-menu">
+                        <input type="text" value="" width="100" style="display: None;"/>
+                        <li><a rel="nofollow" href="#" class="dropdown-item " data-toggle="modal"
+                               data-target="#uploadFile"> <span>上传文件</span></a></li>
+                        <li><a rel="nofollow" href="#" class="dropdown-item" data-toggle="modal"
+                               data-target="#uploadFold"> <span>上传文件夹</span></a></li>
+                        <hr>
+                        <li><a rel="nofollow" href="#" class="dropdown-item " data-toggle="modal"
+                            data-target="#createFile"> <span>新建文件</span></a></li>
+                            <li><a rel="nofollow" href="#" class="dropdown-item " data-toggle="modal"
+                                data-target="#createFold"> <span>新建文件夹</span></a></li>
+                    </ul>
+                </li>
 
 
-          </ul>
-  
+            </ul>
+
         </div>
-      </div>
-      <section>
+    </div>
+    
+
+    <section>
         <div class="container-fluid">
-          <!-- Page Header-->
-          <div class="row">
-                <table class="table" cellspacing = 0 width=100%>
-                  <thead>
+            <!-- Page Header-->
+            <div class="row">
+                <table class="table" cellspacing=0 width=100%>
+                    <thead>
                     <tr>
-                      <th>#</th>
-                      <th>名称</th>
-                      <th>最后修改时间</th>
-                      <th>大小</th>
-                      <th>下载</th>
-                      <th>删除</th>
+                        <th>#</th>
+                        <th>名称</th>
+                        <th>最后修改时间</th>
+                        <th>大小</th>
+                        <th>下载</th>
+                        <th>删除</th>
                     </tr>
-                  </thead>
-                  <tbody>
+                    </thead>
+                    <tbody>
+            
                     <tr>
-                      <th scope="row"><input type="checkbox"/></th>
-                      <td>filename</td>
-                      <td>2019-02-03</td>
-                      <td>26.8kb</td>
-                      <td><input type="button" value="down"></input></td>
-                      <td><input type="button" value="Del"></input></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><input type="checkbox"/></th>
-                      <td>filename</td>
-                      <td>2019-02-03</td>
-                      <td>26.8kb</td>
-                      <td><input type="button" value="down"></input></td>
-                      <td><input type="button" value="Del"></input></td>
+                        <th scope="row"><input type="checkbox"/></th>
+                        <td>filename</td>
+                        <td>2019-02-03</td>
+                        <td>26.8kb</td>
+                        <td><input type="button" value="down"></input></td>
+                        <td><input type="button" value="Del"></input></td>
 
                     </tr>
                     <tr>
-                      <th scope="row"><input type="checkbox"/></th>
-                      <td>filename</td>
-                      <td>2019-02-03</td>
-                      <td>26.8kb</td>
-                      <td><input type="button" value="down"></input></td>
-                      <td><input type="button" value="Del"></input></td>
-
-                    </tr>
-                  </tbody>
+                            <th scope="row"><input type="checkbox"/></th>
+                            <td>filename</td>
+                            <td>2019-02-03</td>
+                            <td>26.8kb</td>
+                            <td><input type="button" value="down"></input></td>
+                            <td><input type="button" value="Del"></input></td>
+    
+                        </tr>
+                    </tbody>
                 </table>
-          </div>
             
+            </div>
+
         </div>
-      </section>
+        <div class="mx-auto bg-warning" style="width:600px">
+            <ul class="pagination" id="pagination" >
+        </ul></div>
 
+    </section>
 
-      <div class="modal fade" id="uploadFold" tabindex="-1" role="dialog" aria-labelledby="uploadFoldLabel" aria-hidden="true">
+    <div class="modal fade" id="uploadFold" tabindex="-1" role="dialog" aria-labelledby="uploadFoldLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                &times;
-              </button> -->
-              <h4 class="modal-title" id="uploadFoldLabel">
-                上传文件夹
-              </h4>
-            </div>
-            <div class="modal-body">
-              <!-- <form id="upload-form" action="#" method="post" enctype="multipart/form-data" >
-                　　　<input type="file" id="upload" name="upload" /> 
-              </form> -->
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-              </button>
-              <button type="button" class="btn btn-primary">
-                上传
-              </button>
-            </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-      </div>
+            <div class="modal-content">
+                <div class="modal-header">
 
-      <div class="modal fade" id="uploadFile" tabindex="-1" role="dialog" aria-labelledby="uploadFileLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                &times;
-              </button> -->
-              <h4 class="modal-title" id="UploadFileLabel">
-                上传文件
-              </h4>
-            </div>
-            <div class="modal-body">
-              <form id="upload-form" action="#" method="post" enctype="multipart/form-data" >
-                　　　<input type="file" id="upload" name="upload" /> 
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-              </button>
-              <button type="button" class="btn btn-primary">
-                上传
-              </button>
-            </div>
-          </div><!-- /.modal-content -->
+                    <h4 class="modal-title" id="uploadFoldLabel">
+                        上传文件夹
+                    </h4>
+                </div>
+                <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
+
+                <div class="modal-body">
+                    <!-- <form id="upload-form" action="#" method="post" enctype="multipart/form-data" >
+                      　　　<input type="file" id="upload" name="upload" />
+                    </form> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <input class = "btn btn-primary" type="submit" value="上传"/>
+                </div>
+                </form>
+            </div><!-- /.modal-content -->
         </div><!-- /.modal -->
-      </div>
-      <footer class="main-footer">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-sm-6">
-              <p>Bootstrapious All rights reserved.  &copy; 2017-2019</p>
-            </div>
-            <div class="col-sm-6 text-right">
-              
-            </div>
-          </div>
-        </div>
-      </footer>
+    </div>
+
+    <div class="modal fade" id="uploadFile" tabindex="-1" role="dialog" aria-labelledby="uploadFileLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                    </button> -->
+                    <h4 class="modal-title" id="UploadFileLabel">
+                        上传文件
+                    </h4>
+                </div>
+                <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        
+                        <input type="file" id="upload" name="upload"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <input class = "btn btn-primary" type="submit" value="上传"/>
+                    </div>
+                </form>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="createFile" tabindex="-1" role="dialog" aria-labelledby="createFileLable"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                    </button> -->
+                    <h4 class="modal-title" id="createFileLable">
+                        新建文件
+                    </h4>
+                </div>
+                <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
+
+                    <div class="modal-body">
+                        　　输入文件名字：　<input  id="upload" name="upload"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+
+                         <input class = "btn btn-primary" type="submit" value="提交"/>
+                    </div>
+            </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="createFold" tabindex="-1" role="dialog" aria-labelledby="createFoldLable"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                    </button> -->
+                    <h4 class="modal-title" id="createFoldLable">
+                        新建文件夹
+                    </h4>
+                </div>
+                <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
+
+                    <div class="modal-body">
+                        　　输入文件夹名字：　<input  id="upload" name="upload"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+
+                         <input class = "btn btn-primary" type="submit" value="提交"/>
+                    </div>
+            </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
     </div>
 
 
-    <!-- JavaScript files-->
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/popper.js/umd/popper.min.js"> </script>
-    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
-    <script src="/vendor/jquery.cookie/jquery.cookie.js"> </script>
-    <script src="/vendor/chart.js/Chart.min.js"></script>
-    <script src="/vendor/jquery-validation/jquery.validate.min.js"></script>
-    <script src="/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="/js/charts-home.js"></script>
-    <!-- Main File-->
-    <script src="/js/front.js"></script>
-  </body>
+
+    <footer class="main-footer">
+           
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p>Bootstrapious All rights reserved. &copy; 2017-2019</p>
+                </div>
+                <div class="col-sm-6 text-right">
+                </div>
+            </div>
+        </div>
+        
+    </footer>
+</div>
+
+<script>
+    $(function () {
+        window.pagObj = $('#pagination').twbsPagination({
+            totalPages: 35,
+            visiblePages: 10,
+            onPageClick: function (event, page) {
+                console.info(page + ' (from options)');
+            }
+        }).on('page', function (event, page) {
+            console.info(page + ' (from event listening)');
+        });
+    });
+
+</script>
+
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/popper.js/umd/popper.min.js"></script>
+<!-- <script src="vendor/bootstrap/js/bootstrap.min.js"></script> -->
+<script src="js/jquery.twbsPagination.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+<script src="js/jquery.twbsPagination.js" type="text/javascript"></script>
+<!-- <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script> -->
+<script src="js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js"></script>
+<script src="vendor/chart.js/Chart.min.js"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/charts-home.js"></script>
+<!-- Main File-->
+<script src="js/front.js"></script>
+</body>
 </html>
