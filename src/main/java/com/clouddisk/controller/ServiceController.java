@@ -11,13 +11,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -46,37 +49,56 @@ public class ServiceController {
     private FoldersService foldersService;
 
     @RequestMapping(value = "/loginPage")
-    public String logInPage(){
-        return "login";
+    public String logInPage() {
+        return "signin";
     }
 
 
     @RequestMapping(value = "/loginCheck")
-    public String logIn(Model model, String stuNumb,String password,PageQuery pageQuery) {
+    public String logIn(Model model, String stuNumb, String password, PageQuery pageQuery) {
         Users user;
-        if (userInfoService.getUserByUserNameAndPassword(stuNumb, password) != null){
-            user  = new Users();
-            return showFolders(model,user,pageQuery);}
-        else {
+        if (userInfoService.getUserByUserNameAndPassword(stuNumb, password) != null) {
+            user = new Users();
+            return showFolders(model, user, pageQuery);
+        } else {
             return "login";
         }
     }
 
     @RequestMapping("/showfolders")
-    public String showFolders(Model model, Users user,PageQuery pageQuery) {
+
+    public String showFolders(Model model, Users user, PageQuery pageQuery) {
         user.setUserId(1);
 
         pageQuery.setPageSize(5);
         List<Folders> allfolders = foldersService.getAllFoldersByUserId(1);
         PageQuery<FilesInfo> noInFoldFiles;
-        noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery,user.getUserId());
+        noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery, user.getUserId());
 
         model.addAttribute("allfolders", allfolders);
         model.addAttribute("noInFoldFiles", noInFoldFiles.getList());
         model.addAttribute("user", user);
-        model.addAttribute("pageQuery",pageQuery);
+        model.addAttribute("pageQuery", pageQuery);
 
         return "index";
+    }
+
+
+    @RequestMapping("/ajaxshowfolders")
+    @ResponseBody
+    public Map<String,Object> ajaxShowFolders(Users user, PageQuery pageQuery) {
+        System.out.print(user.getUserId()+""+pageQuery.getPageNumber());
+        pageQuery.setPageSize(5);
+        List<Folders> allfolders = foldersService.getAllFoldersByUserId(user.getUserId());
+        PageQuery<FilesInfo> noInFoldFiles;
+        noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery, user.getUserId());
+
+        Map<String,Object> map=new HashMap<String,Object>();
+        map.put("user",user);
+        map.put("pageQuery",pageQuery);
+        map.put("allfolders",allfolders);
+        map.put("noInFoldFiles",noInFoldFiles.getList());
+        return map;
     }
 
     @RequestMapping("/showfiles")
@@ -92,7 +114,7 @@ public class ServiceController {
 
 
     @RequestMapping(value = "/uploadfile")
-    public String uploadFile(Model model, @RequestParam("uploadfile") MultipartFile file, Users user,PageQuery pageQuery) throws Exception {
+    public String uploadFile(Model model, @RequestParam("uploadfile") MultipartFile file, Users user, PageQuery pageQuery) throws Exception {
         if (file == null) {
             System.out.print("file is null...");
         } else {
@@ -120,7 +142,7 @@ public class ServiceController {
         }
 
         List<Folders> allfolders = foldersService.getAllFoldersByUserId(1);
-        PageQuery<FilesInfo> noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery,user.getUserId());
+        PageQuery<FilesInfo> noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery, user.getUserId());
 
         model.addAttribute("allfolders", allfolders);
         model.addAttribute("noInFoldFiles", noInFoldFiles.getList());

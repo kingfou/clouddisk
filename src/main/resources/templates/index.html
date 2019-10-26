@@ -330,10 +330,10 @@
                         新建文件夹
                     </h4>
                 </div>
-                <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
+                <form id="upload-Fold" action="#" method="post" enctype="multipart/form-data">
 
                     <div class="modal-body">
-                        　　输入文件夹名字：　<input id="upload" name="upload"/>
+                        　　输入文件夹名字：　<input id="foldName" name="upload"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
@@ -374,12 +374,32 @@
             totalPages: '${pageQuery.totalPage}',
             visiblePages: '${pageQuery.pageSize}',
             startPage:'${pageQuery.pageNumber}',
+
             onPageClick: function (event, page) {
 
             }
         }).on('page', function (event, page) {
             $("#pageNumber").val(page);
             $("#pageFlash-form").submit();
+            // $.ajax({
+            //     type:"post",
+            //     url:"/home/ajaxshowfolders",
+            //     dataType: "json",
+            //     data:{
+            //         pageNumber:page,
+            //         userId:'${user.userId}'
+            //
+            //     },
+            //     async:true,
+            //     error:function(){
+            //         alert("network error!");
+            //     },
+            //     success:function(data){
+            //         console.log("hello world!");
+            //         console.log(data.allfolders[0]);
+            //     }
+            //
+            // })
         });
     });
 
