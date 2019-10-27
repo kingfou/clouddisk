@@ -379,27 +379,27 @@
 
             }
         }).on('page', function (event, page) {
-            $("#pageNumber").val(page);
-            $("#pageFlash-form").submit();
-            // $.ajax({
-            //     type:"post",
-            //     url:"/home/ajaxshowfolders",
-            //     dataType: "json",
-            //     data:{
-            //         pageNumber:page,
-            //         userId:'${user.userId}'
-            //
-            //     },
-            //     async:true,
-            //     error:function(){
-            //         alert("network error!");
-            //     },
-            //     success:function(data){
-            //         console.log("hello world!");
-            //         console.log(data.allfolders[0]);
-            //     }
-            //
-            // })
+            // $("#pageNumber").val(page);
+            // $("#pageFlash-form").submit();
+            $.ajax({
+                type:"post",
+                url:"/home/ajaxshowfolders",
+                dataType: "json",
+                data:{
+                    pageNumber:page,
+                    userId:'${user.userId}'
+
+                },
+                async:true,
+                error:function(){
+                    alert("network error!");
+                },
+                success:function(data){
+                    console.log("hello world!");
+                    console.log(data.allfolders[0]);
+                }
+
+            })
         });
     });
 

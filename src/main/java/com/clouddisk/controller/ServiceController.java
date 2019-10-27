@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 import java.io.File;
 import java.util.Date;
@@ -48,6 +49,10 @@ public class ServiceController {
     @Resource
     private FoldersService foldersService;
 
+
+
+
+
     @RequestMapping(value = "/loginPage")
     public String logInPage() {
         return "signin";
@@ -55,13 +60,14 @@ public class ServiceController {
 
 
     @RequestMapping(value = "/loginCheck")
-    public String logIn(Model model, String stuNumb, String password, PageQuery pageQuery) {
-        Users user;
-        if (userInfoService.getUserByUserNameAndPassword(stuNumb, password) != null) {
-            user = new Users();
+    public String logIn(Model model, String stuNumb, String password, PageQuery pageQuery, HttpSession session) {
+        Users user = userInfoService.getUserByUserNameAndPassword(stuNumb, password);
+        if (user != null) {
+            session.setAttribute("user",user);
             return showFolders(model, user, pageQuery);
         } else {
-            return "login";
+            model.addAttribute("error_msg","please check your student number and the password");
+            return "signin";
         }
     }
 
