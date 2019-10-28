@@ -1,10 +1,13 @@
 package com.clouddisk.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.clouddisk.domain.*;
 import com.clouddisk.service.FilesInfoService;
 import com.clouddisk.service.FoldersService;
 import com.clouddisk.service.UserInfoService;
+import com.clouddisk.utils.JSONToDomain;
 import org.beetl.sql.core.engine.PageQuery;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -15,13 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.io.File;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.clouddisk.utils.CephObjectControl;
+
+import java.io.*;
+import java.util.*;
 
 
 /**
@@ -39,6 +43,14 @@ import java.util.Map;
 @RequestMapping(value = "/home")
 public class ServiceController {
 
+    /**
+     * 配置文件服务器
+     */
+
+    String accessKey = "1N07V6A6K7ZA15UP745J";
+    String secretKey = "kvBOGP5OBq7dqfAgqYB0meyDNnS92Kvegdg3ifNh";
+    String endPoint = "http://125.216.242.149:7480";
+    CephObjectControl cephObjectControl = new CephObjectControl(accessKey, secretKey, endPoint);
 
     @Resource
     private UserInfoService userInfoService;
@@ -50,9 +62,6 @@ public class ServiceController {
     private FoldersService foldersService;
 
 
-
-
-
     @RequestMapping(value = "/loginPage")
     public String logInPage() {
         return "signin";
@@ -60,61 +69,74 @@ public class ServiceController {
 
 
     @RequestMapping(value = "/loginCheck")
-    public String logIn(Model model, String stuNumb, String password, PageQuery pageQuery, HttpSession session) {
+    public String logIn(Model model, String stuNumb, String password, HttpSession session) {
         Users user = userInfoService.getUserByUserNameAndPassword(stuNumb, password);
         if (user != null) {
-            session.setAttribute("user",user);
-            return showFolders(model, user, pageQuery);
+            session.setAttribute("user", user);
+            return showFolders(model, user,"/");
         } else {
-            model.addAttribute("error_msg","please check your student number and the password");
+            model.addAttribute("error_msg", "please check your student number and the password");
             return "signin";
         }
     }
 
     @RequestMapping("/showfolders")
 
-    public String showFolders(Model model, Users user, PageQuery pageQuery) {
+    public String showFolders(Model model, Users user, String path) {
         user.setUserId(1);
 
-        pageQuery.setPageSize(5);
-        List<Folders> allfolders = foldersService.getAllFoldersByUserId(1);
-        PageQuery<FilesInfo> noInFoldFiles;
-        noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery, user.getUserId());
+        //for test
+        if(path==null||"".equals(path)) path="/";
+
+
+        JSONObject jsonObject = cephObjectControl.listAllFoldersAndFiles("testbucket", "kingfou", path);
+        String tips= "tips";
+        String result = jsonObject.getString("return");
+        System.out.print(result);
+        JSONArray folderArray = (JSONArray) jsonObject.get("folderArray");
+        JSONArray fileArray = (JSONArray) jsonObject.get("fileArray");
+
+        List<Folders> allfolders = new ArrayList<Folders>();
+        List<FilesInfo> noInFoldFiles = new ArrayList<FilesInfo>();
+        if (folderArray!=null) allfolders = JSONToDomain.JSONTToFolder(folderArray);
+        if (fileArray!=null) noInFoldFiles = JSONToDomain.JSONTToFilesInfo(fileArray);
+
 
         model.addAttribute("allfolders", allfolders);
-        model.addAttribute("noInFoldFiles", noInFoldFiles.getList());
+        model.addAttribute("noInFoldFiles", noInFoldFiles);
         model.addAttribute("user", user);
-        model.addAttribute("pageQuery", pageQuery);
-
         return "index";
     }
 
 
     @RequestMapping("/ajaxshowfolders")
     @ResponseBody
-    public Map<String,Object> ajaxShowFolders(Users user, PageQuery pageQuery) {
-        System.out.print(user.getUserId()+""+pageQuery.getPageNumber());
+    public Map<String, Object> ajaxShowFolders(Users user, PageQuery pageQuery) {
+        System.out.print(user.getUserId() + "" + pageQuery.getPageNumber());
         pageQuery.setPageSize(5);
         List<Folders> allfolders = foldersService.getAllFoldersByUserId(user.getUserId());
         PageQuery<FilesInfo> noInFoldFiles;
         noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery, user.getUserId());
 
-        Map<String,Object> map=new HashMap<String,Object>();
-        map.put("user",user);
-        map.put("pageQuery",pageQuery);
-        map.put("allfolders",allfolders);
-        map.put("noInFoldFiles",noInFoldFiles.getList());
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("user", user);
+        map.put("pageQuery", pageQuery);
+        map.put("allfolders", allfolders);
+        map.put("noInFoldFiles", noInFoldFiles.getList());
         return map;
     }
 
     @RequestMapping("/showfiles")
-    public String showFiles(Model model, Integer folderId) {
+    public String showFiles(Model model, Integer folderId, Users user, PageQuery pageQuery) {
 
+        pageQuery.setPageSize(5);
         System.out.print(folderId);
         List<Folders> allfolders = foldersService.getAllFoldersByUserId(1);
         List<FilesInfo> allfiles = filesInfoService.getAllFilesInfoByFolderId(folderId);
         model.addAttribute("allfolders", allfolders);
         model.addAttribute("allfiles", allfiles);
+        model.addAttribute("pageQuery", pageQuery);
+        model.addAttribute("user", user);
         return "fold";
     }
 
@@ -128,7 +150,7 @@ public class ServiceController {
             // get file information
             long size = file.getSize() / 1000;
             String file_name = file.getOriginalFilename();
-            String path = "H://" + "upload/" + file_name;
+            String path = "/kingfou/" + file_name;
             FilesInfo filesInfo = new FilesInfo();
 
             filesInfo.setUserId(user.getUserId());
@@ -138,8 +160,9 @@ public class ServiceController {
             filesInfo.setUploaddate(new Date());
             filesInfo.setSize((double) size);
 
-
-            file.transferTo(new File(path));
+            // save the file to Ceph server
+            boolean result = cephObjectControl.uploadFile("testbucket", "kingfou", "/" + file_name, file.getInputStream());
+            System.out.print(result);
 
             // save in database
             filesInfoService.InserFilesInfo(filesInfo);
@@ -154,6 +177,54 @@ public class ServiceController {
         model.addAttribute("noInFoldFiles", noInFoldFiles.getList());
         model.addAttribute("user", user);
         return "index";
+    }
+
+    @RequestMapping(value = "/downloadFile")
+    @ResponseBody
+    public String downloadFile(HttpServletResponse response) throws Exception {
+
+        InputStream fis = cephObjectControl.downloadFile("testbucket", "kingfou", "/D_1shot.py");
+
+        // 将数据流交付OutputStream
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment;fileName=" + "D_1shot.py");
+        int size = 1024;
+        byte[] buffer = new byte[size];
+        OutputStream fiss = response.getOutputStream();
+        int len = 0;
+        while ((len = fis.read(buffer)) > 0) {
+            fiss.write(buffer, 0, len);
+        }
+        fis.close();
+        fiss.close();
+
+
+        return "successful";
+    }
+
+    @RequestMapping(value = "listAllFoldAndfiles")
+    public String listAllFoldAndfiles(String path) {
+        JSONObject jsonObject = cephObjectControl.listAllFoldersAndFiles("testbucket", "kingfou", path);
+        JSONArray folderArray = (JSONArray) jsonObject.get("folderArray");
+        JSONArray fileArray = (JSONArray) jsonObject.get("fileArray");
+
+        //解析 json 数据
+        System.out.print(folderArray.toString());
+        System.out.print(fileArray.toString());
+        List<Folders> filesInfos = JSONToDomain.JSONTToFolder(folderArray);
+        for (Folders f : filesInfos) {
+            System.out.println(f.getName());
+            System.out.println(f.getUploaddate());
+
+        }
+
+        return "";
+    }
+
+    @RequestMapping(value = "createFolder")
+    public String createFolder() {
+        cephObjectControl.createFolder("testbucket", "kingfou", "/test5/");
+        return "";
     }
 
 

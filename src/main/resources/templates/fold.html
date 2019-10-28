@@ -70,18 +70,18 @@
         <div class="main-menu">
           <h5 class="sidenav-heading">Main</h5>
           <ul id="side-main-menu" class="side-menu list-unstyled">  
-              <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> 
+              <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse">
                 <i class="icon-interface-windows"></i>我的云端硬盘 </a>
                 <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
                   <%
                   for(folder in allfolders){
                   %>
-                  <li><a href="/home/showfiles?folderId=${folder.folderId}">${folder.name}</a></li>
+                  <li><a href="/home/showfiles?path=/${folder.name}">${folder.name}</a></li>
                   <%
                   }
                   %>
                 </ul>
-              </li>                
+              </li>
             <li><a href="index.html"> <i class="icon-picture"></i>共享</a></li>
             <li><a href="forms.html"> <i class="icon-form"></i>已删除文件  </a></li>
           
@@ -235,8 +235,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
-                            关闭
-                            <input class="btn btn-primary" type="submit" value="上传">
+                            关闭</button>
+                            <input class="btn btn-primary" type="submit" value="上传"/>
 
                     </div>
                 </form>

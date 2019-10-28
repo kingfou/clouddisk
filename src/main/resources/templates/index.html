@@ -101,7 +101,7 @@
                         <%
                         for(folder in allfolders){
                         %>
-                        <li><a href="/home/showfiles?folderId=${folder.folderId}">${folder.name}</a></li>
+                        <li><a href="/home/showfolders?path=/${folder.name}/">${folder.name}</a></li>
                         <%
                         }
                         %>
@@ -153,11 +153,6 @@
                         <input type="text" value="" width="100" style="display: None;"/>
                         <li><a rel="nofollow" href="#" class="dropdown-item " data-toggle="modal"
                                data-target="#uploadFile"> <span>上传文件</span></a></li>
-                        <li><a rel="nofollow" href="#" class="dropdown-item" data-toggle="modal"
-                               data-target="#uploadFold"> <span>上传文件夹</span></a></li>
-                        <hr>
-                        <li><a rel="nofollow" href="#" class="dropdown-item " data-toggle="modal"
-                               data-target="#createFile"> <span>新建文件</span></a></li>
                         <li><a rel="nofollow" href="#" class="dropdown-item " data-toggle="modal"
                                data-target="#createFold"> <span>新建文件夹</span></a></li>
                     </ul>
@@ -191,7 +186,7 @@
                     %>
                     <tr>
                         <th scope="row"><input type="checkbox"/></th>
-                        <td><a href="/home/showfiles?folderId=${folder.folderId}">${folder.name}</a></td>
+                        <td><a href="/home/showfolders?path=/${folder.name}/">${folder.name}</a></td>
                         <td>${folder.uploaddate}</td>
                         <td>${folder.size} Kb</td>
                         <td><input type="button" value="down" disabled="disabled"/></td>
@@ -281,7 +276,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
-                            关闭
+                            关闭</button>
                             <input class="btn btn-primary" type="submit" value="上传">
 
                     </div>
@@ -359,11 +354,7 @@
             </div>
         </div>
 
-        <form id="pageFlash-form" action="/home/showfolders" method="post"
-              enctype="application/x-www-form-urlencoded" type="hidden">
-            <input  name="userId" value=${user.userId}>
-            <input id="pageNumber" name="pageNumber" value=${pageQuery.pageNumber}>
-        </form>
+
 
     </footer>
 </div>
@@ -371,35 +362,14 @@
 <script>
     $(function () {
         window.pagObj = $('#pagination').twbsPagination({
-            totalPages: '${pageQuery.totalPage}',
-            visiblePages: '${pageQuery.pageSize}',
-            startPage:'${pageQuery.pageNumber}',
-
+            totalPages: 30,
+            visiblePages: 10,
+            startPage:1,
             onPageClick: function (event, page) {
 
             }
         }).on('page', function (event, page) {
-            // $("#pageNumber").val(page);
-            // $("#pageFlash-form").submit();
-            $.ajax({
-                type:"post",
-                url:"/home/ajaxshowfolders",
-                dataType: "json",
-                data:{
-                    pageNumber:page,
-                    userId:'${user.userId}'
 
-                },
-                async:true,
-                error:function(){
-                    alert("network error!");
-                },
-                success:function(data){
-                    console.log("hello world!");
-                    console.log(data.allfolders[0]);
-                }
-
-            })
         });
     });
 
@@ -408,7 +378,7 @@
 <!-- JavaScript files-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/popper.js/umd/popper.min.js"></script>
-<!-- <script src="/vendor/bootstrap/js/bootstrap.min.js"></script> -->
+ <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!-- add new js -->
 <script src="/js/jquery.twbsPagination.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
