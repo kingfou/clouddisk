@@ -45,6 +45,7 @@
             color: #fff;
         }
     </style>
+
     <script type="text/javascript">
         $(function () {
             $('tbody>tr').click(function () {
@@ -72,9 +73,9 @@
             $(".popover-options a").popover({html: true});
         });
     </script>
-    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body>
 <!-- Side Navbar -->
@@ -128,7 +129,7 @@
                     </a></div>
                     <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
 
-                        <li class="nav-item"><a href="login.html" class="nav-link logout"> <span
+                        <li class="nav-item"><a href="/home/logOut" class="nav-link logout"> <span
                                 class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out"></i></a></li>
                     </ul>
                 </div>
@@ -186,11 +187,18 @@
                     %>
                     <tr>
                         <th scope="row"><input type="checkbox"/></th>
-                        <td><a href="/home/showfolders?path=/${folder.name}/">${folder.name}</a></td>
+                        <td><a href="/home/showfolders?path=${prefix}${folder.name}/">${folder.name}</a></td>
                         <td>${folder.uploaddate}</td>
                         <td>${folder.size} Kb</td>
                         <td><input type="button" value="down" disabled="disabled"/></td>
-                        <td><input type="button" value="Del"/></td>
+                        <td>
+                            <form action="/home/deleteFolder" >
+                                <input type="hidden" name="foldName" value="${folder.name}"/>
+                                <input type="hidden" name="prefix" value="${prefix}"/>
+                                <input type="submit" value="Del"/>
+                            </form>
+
+                        </td>
                     </tr>
                     <%
                     }
@@ -198,15 +206,28 @@
 
                     <!--无目录文件-->
                     <%
-                    for(folder in noInFoldFiles){
+                    for(file in noInFoldFiles){
                     %>
                     <tr>
                         <th scope="row"><input type="checkbox"/></th>
-                        <td>${folder.name}</td>
-                        <td>${folder.uploaddate}</td>
-                        <td>${folder.size} Kb</td>
-                        <td><input type="button" value="down"/></td>
-                        <td><input type="button" value="Del"/></td>
+                        <td>${file.name}</td>
+                        <td>${file.uploaddate}</td>
+                        <td>${file.size} Kb</td>
+                        <td>
+
+                            <form method="post" action="/home/downloadFile">
+                                <input value="${prefix}${file.name}" name="path" type="hidden"/>
+                                <input value="${file.name}" name="filename" type="hidden"/>
+                                <input  type="submit" value="down" />
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" action="/home/deleteFile">
+                                <input value="${prefix}" name="prefix" type="hidden"/>
+                                <input value="${file.name}" name="fileName" type="hidden"/>
+                                <input  type="submit" value="Del" />
+                            </form>
+                        </td>
                     </tr>
                     <%
                     }
@@ -271,13 +292,15 @@
                               enctype="multipart/form-data">
                             <input type="file" id="upload" name="uploadfile"/>
                             <input type="hidden" name="userId" value=${user.userId}>
+                            <input type="hidden" name="prefix" value=${prefix}>
                             <input type="submit" value="上传">
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
-                            关闭</button>
-                            <input class="btn btn-primary" type="submit" value="上传">
+                            关闭
+                        </button>
+                        <input class="btn btn-primary" type="submit" value="上传">
 
                     </div>
                 </form>
@@ -325,10 +348,11 @@
                         新建文件夹
                     </h4>
                 </div>
-                <form id="upload-Fold" action="#" method="post" enctype="multipart/form-data">
+                <form id="upload-Fold" action="/home/createFolder" method="post" enctype="multipart/form-data">
 
                     <div class="modal-body">
-                        　　输入文件夹名字：　<input id="foldName" name="upload"/>
+                        　　输入文件夹名字：　<input id="foldName" name="foldName"/>
+                        　　                   <input id="prefix" name="prefix" value="${prefix}" type="hidden"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
@@ -355,7 +379,6 @@
         </div>
 
 
-
     </footer>
 </div>
 
@@ -364,7 +387,7 @@
         window.pagObj = $('#pagination').twbsPagination({
             totalPages: 30,
             visiblePages: 10,
-            startPage:1,
+            startPage: 1,
             onPageClick: function (event, page) {
 
             }
@@ -378,7 +401,7 @@
 <!-- JavaScript files-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/popper.js/umd/popper.min.js"></script>
- <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
 <!-- add new js -->
 <script src="/js/jquery.twbsPagination.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

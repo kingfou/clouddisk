@@ -73,11 +73,19 @@ public class ServiceController {
         Users user = userInfoService.getUserByUserNameAndPassword(stuNumb, password);
         if (user != null) {
             session.setAttribute("user", user);
-            return showFolders(model, user,"/");
+            return showFolders(model, user, "/");
         } else {
             model.addAttribute("error_msg", "please check your student number and the password");
             return "signin";
         }
+    }
+
+
+    @RequestMapping("/logOut")
+    public String logOut(HttpServletRequest request) {
+        request.getSession().setAttribute("user", null);
+
+        return "signin";
     }
 
     @RequestMapping("/showfolders")
@@ -86,11 +94,14 @@ public class ServiceController {
         user.setUserId(1);
 
         //for test
-        if(path==null||"".equals(path)) path="/";
+        if (path == null || "".equals(path)) path = "/";
 
+
+        //上一次请求中 文件的前缀记录  用于文件的全限定名称。
+        String prefix = path;
 
         JSONObject jsonObject = cephObjectControl.listAllFoldersAndFiles("testbucket", "kingfou", path);
-        String tips= "tips";
+        String tips = "tips";
         String result = jsonObject.getString("return");
         System.out.print(result);
         JSONArray folderArray = (JSONArray) jsonObject.get("folderArray");
@@ -98,96 +109,110 @@ public class ServiceController {
 
         List<Folders> allfolders = new ArrayList<Folders>();
         List<FilesInfo> noInFoldFiles = new ArrayList<FilesInfo>();
-        if (folderArray!=null) allfolders = JSONToDomain.JSONTToFolder(folderArray);
-        if (fileArray!=null) noInFoldFiles = JSONToDomain.JSONTToFilesInfo(fileArray);
+        if (folderArray != null) allfolders = JSONToDomain.JSONTToFolder(folderArray);
+        if (fileArray != null) noInFoldFiles = JSONToDomain.JSONTToFilesInfo(fileArray);
 
 
         model.addAttribute("allfolders", allfolders);
         model.addAttribute("noInFoldFiles", noInFoldFiles);
         model.addAttribute("user", user);
+        model.addAttribute("prefix", prefix);
         return "index";
     }
 
 
-    @RequestMapping("/ajaxshowfolders")
+    @RequestMapping("/AjaxShowFolders")
     @ResponseBody
-    public Map<String, Object> ajaxShowFolders(Users user, PageQuery pageQuery) {
-        System.out.print(user.getUserId() + "" + pageQuery.getPageNumber());
-        pageQuery.setPageSize(5);
-        List<Folders> allfolders = foldersService.getAllFoldersByUserId(user.getUserId());
-        PageQuery<FilesInfo> noInFoldFiles;
-        noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery, user.getUserId());
+    /***
+     * path : 路径前缀 以"/"开始 以"/"结束
+     */
+
+    public Map<String, Object> ajaxShowFolders(String path) {
+        //for test
+        if ("".equals(path) || path == null) {
+            String tips = "";
+            path = "/";
+        }
+
+
+        //上一次请求中 文件的前缀记录  用于文件的全限定名称。
+        String prefix = path;
+
+        JSONObject jsonObject = cephObjectControl.listAllFoldersAndFiles("testbucket", "kingfou", path);
+
+
+        JSONArray folderArray = (JSONArray) jsonObject.get("folderArray");
+        JSONArray fileArray = (JSONArray) jsonObject.get("fileArray");
+
+        List<Folders> allfolders = new ArrayList<Folders>();
+        List<FilesInfo> noInFoldFiles = new ArrayList<FilesInfo>();
+
+        if (folderArray != null) allfolders = JSONToDomain.JSONTToFolder(folderArray);
+        if (fileArray != null) noInFoldFiles = JSONToDomain.JSONTToFilesInfo(fileArray);
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("user", user);
-        map.put("pageQuery", pageQuery);
         map.put("allfolders", allfolders);
-        map.put("noInFoldFiles", noInFoldFiles.getList());
+        map.put("noInFoldFiles", noInFoldFiles);
         return map;
-    }
 
-    @RequestMapping("/showfiles")
-    public String showFiles(Model model, Integer folderId, Users user, PageQuery pageQuery) {
-
-        pageQuery.setPageSize(5);
-        System.out.print(folderId);
-        List<Folders> allfolders = foldersService.getAllFoldersByUserId(1);
-        List<FilesInfo> allfiles = filesInfoService.getAllFilesInfoByFolderId(folderId);
-        model.addAttribute("allfolders", allfolders);
-        model.addAttribute("allfiles", allfiles);
-        model.addAttribute("pageQuery", pageQuery);
-        model.addAttribute("user", user);
-        return "fold";
     }
 
 
     @RequestMapping(value = "/uploadfile")
-    public String uploadFile(Model model, @RequestParam("uploadfile") MultipartFile file, Users user, PageQuery pageQuery) throws Exception {
+    public String uploadFile(Model model, @RequestParam("uploadfile") MultipartFile file, Users user, String prefix) throws Exception {
         if (file == null) {
             System.out.print("file is null...");
         } else {
 
             // get file information
-            long size = file.getSize() / 1000;
             String file_name = file.getOriginalFilename();
-            String path = "/kingfou/" + file_name;
-            FilesInfo filesInfo = new FilesInfo();
-
-            filesInfo.setUserId(user.getUserId());
-            filesInfo.setFolderId(1);
-            filesInfo.setName(file_name);
-            filesInfo.setPath(path);
-            filesInfo.setUploaddate(new Date());
-            filesInfo.setSize((double) size);
-
             // save the file to Ceph server
-            boolean result = cephObjectControl.uploadFile("testbucket", "kingfou", "/" + file_name, file.getInputStream());
+            boolean result = cephObjectControl.uploadFile("testbucket", "kingfou", prefix + file_name, file.getInputStream());
             System.out.print(result);
+        }
+        return showFolders(model, user, prefix);
 
-            // save in database
-            filesInfoService.InserFilesInfo(filesInfo);
+    }
 
+    @RequestMapping(value = "/AjaxUploadFile")
+    @ResponseBody
+    /**
+     * MultipartFile file ：表单提交的 type=file 的熟悉
+     * prefix ： 路径前缀 以"/"开始， 以"/"结束。
+     * */
+    public boolean uploadFile(@RequestParam("uploadfile") MultipartFile file, String prefix) throws Exception {
+        if (file == null) {
+            return false;
+        } else {
 
+            // get file information
+            String file_name = file.getOriginalFilename();
+            // save the file to Ceph server
+            boolean result = cephObjectControl.uploadFile("testbucket", "kingfou", prefix + file_name, file.getInputStream());
+            System.out.print(result);
+            return true;
         }
 
-        List<Folders> allfolders = foldersService.getAllFoldersByUserId(1);
-        PageQuery<FilesInfo> noInFoldFiles = filesInfoService.getNoFoldFilesByUserId(pageQuery, user.getUserId());
 
-        model.addAttribute("allfolders", allfolders);
-        model.addAttribute("noInFoldFiles", noInFoldFiles.getList());
-        model.addAttribute("user", user);
-        return "index";
     }
 
     @RequestMapping(value = "/downloadFile")
     @ResponseBody
-    public String downloadFile(HttpServletResponse response) throws Exception {
+    /**
+     * path : 路径前缀 以"/"开始 以"/"结束
+     * filename :文件全名 xxx.xxx 的形式。
+     */
 
-        InputStream fis = cephObjectControl.downloadFile("testbucket", "kingfou", "/D_1shot.py");
+    public String downloadFile(HttpServletResponse response, String path, String filename) throws Exception {
+
+        //获取文件的全路径：
+
+
+        InputStream fis = cephObjectControl.downloadFile("testbucket", "kingfou", path);
 
         // 将数据流交付OutputStream
         response.reset();
-        response.setHeader("Content-Disposition", "attachment;fileName=" + "D_1shot.py");
+        response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
         int size = 1024;
         byte[] buffer = new byte[size];
         OutputStream fiss = response.getOutputStream();
@@ -222,9 +247,61 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "createFolder")
-    public String createFolder() {
-        cephObjectControl.createFolder("testbucket", "kingfou", "/test5/");
-        return "";
+    public String createFolder(Model model, Users usre, String prefix, String foldName) {
+        //获取当前文件夹的全限定路径
+        System.out.print(prefix);
+        cephObjectControl.createFolder("testbucket", "kingfou", prefix + foldName + "/");
+        return showFolders(model, usre, prefix);
+    }
+
+    @RequestMapping(value = "AjaxCreateFolder")
+    @ResponseBody
+    /**
+     * prefix : 路径前缀，以 "/" 开始 以"/"结束。
+     * foldName :文件名称
+     */
+    public boolean AjaxCreateFolder(String prefix, String foldName) {
+        //获取当前文件夹的全限定路径
+        System.out.print(prefix);
+        return cephObjectControl.createFolder("testbucket", "kingfou", prefix + foldName + "/");
+
+    }
+
+
+    @RequestMapping(value="/deleteFolder")
+    public String deleteFolder(Model model, Users user, String prefix,String foldName){
+        cephObjectControl.deleteFolder("testbucket","kingfou",prefix+foldName+"/");
+
+        return showFolders(model,user,prefix);
+    }
+
+    @RequestMapping(value="/AjaxDeleteFolder")
+    @ResponseBody
+    /**
+     * preifx 路径前缀 文件夹当前所在路径。
+     * foleName: 文件夹名称
+     * */
+    public boolean AjaxDeleteFolder(String prefix,String foldName){
+       return cephObjectControl.deleteFolder("testbucket","kingfou",prefix+foldName+"/");
+    }
+
+
+    @RequestMapping(value="/deleteFile")
+    public String deleteFile(Model model,Users user, String prefix,String fileName){
+        System.out.print(prefix+fileName);
+        cephObjectControl.deleteFile("testbucket","kingfou",prefix+fileName);
+        return showFolders(model,user,prefix);
+    }
+
+
+    @RequestMapping(value="/AjaxDeleteFile")
+    @ResponseBody
+    /**
+     * path ：文件的全路径名称。 /test/subtest/xxx.xxx
+     * */
+    public boolean AjaxDeleteFile(String path){
+        return cephObjectControl.deleteFile("testbucket","kingfou",path);
+
     }
 
 

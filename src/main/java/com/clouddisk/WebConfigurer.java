@@ -2,6 +2,7 @@ package com.clouddisk;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /*
                           _ooOoo_
@@ -26,10 +27,15 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
         author : kingfoulin    
        */
 @Configuration
-public class WebMvcConfigurer implements {
+public class WebConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/login").excludePathPatterns("/loginSys").excludePathPatterns("/static/**");
+//        registry.addInterceptor(new LoginInterceptor())
+//                .addPathPatterns("/home/**")
+//                .excludePathPatterns("/static/**")
+//                .excludePathPatterns("/css/**","/images/**","/js/**")  //放行
+//                .excludePathPatterns("/home/loginPage")  //放行
+//                .excludePathPatterns("/home/loginCheck"); //放行
     }
 
 
