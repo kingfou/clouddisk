@@ -1,6 +1,7 @@
 package com.clouddisk.controller;
 
 
+import ch.qos.logback.classic.pattern.SyslogStartConverter;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.clouddisk.domain.*;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import com.clouddisk.utils.CephObjectControl;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 
 
@@ -127,33 +130,33 @@ public class ServiceController {
      * path : 路径前缀 以"/"开始 以"/"结束
      */
 
-    public Map<String, Object> ajaxShowFolders(String path) {
+    public JSONObject ajaxShowFolders(String path) {
         //for test
         if ("".equals(path) || path == null) {
             String tips = "";
             path = "/";
         }
 
-
         //上一次请求中 文件的前缀记录  用于文件的全限定名称。
         String prefix = path;
 
         JSONObject jsonObject = cephObjectControl.listAllFoldersAndFiles("testbucket", "kingfou", path);
 
-
         JSONArray folderArray = (JSONArray) jsonObject.get("folderArray");
         JSONArray fileArray = (JSONArray) jsonObject.get("fileArray");
 
-        List<Folders> allfolders = new ArrayList<Folders>();
-        List<FilesInfo> noInFoldFiles = new ArrayList<FilesInfo>();
+        List<JSONObject> allfolders = new ArrayList<JSONObject>();
+        List<JSONObject> noInFoldFiles = new ArrayList<JSONObject>();
 
-        if (folderArray != null) allfolders = JSONToDomain.JSONTToFolder(folderArray);
-        if (fileArray != null) noInFoldFiles = JSONToDomain.JSONTToFilesInfo(fileArray);
+        if (folderArray != null) allfolders = JSONToDomain.ListFoldersJSONObject(folderArray);
+        if (fileArray != null) noInFoldFiles = JSONToDomain.ListFilesJSONObject(fileArray);
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("allfolders", allfolders);
-        map.put("noInFoldFiles", noInFoldFiles);
-        return map;
+        JSONObject result = new JSONObject();
+        result.put("allfolders", allfolders);
+        result.put("noInFoldFiles", noInFoldFiles);
+
+        return result;
+
 
     }
 
@@ -196,22 +199,35 @@ public class ServiceController {
 
     }
 
-    @RequestMapping(value = "/downloadFile")
+    @RequestMapping(value = "/downloadFile",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     /**
-     * path : 路径前缀 以"/"开始 以"/"结束
-     * filename :文件全名 xxx.xxx 的形式。
+     * path : 文件的全路径。 /test/xxx.xxx
+     * filename :文件名称 xxx.xxx 的形式。可以省略。
      */
 
     public String downloadFile(HttpServletResponse response, String path, String filename) throws Exception {
 
         //获取文件的全路径：
 
+        if("".equals(filename)||filename==null) {
+            String [] subpath = path.split("/");
+            filename=subpath[subpath.length-1];
+            System.out.print(filename);
+        }
 
+//        filename = URLEncoder.encode(filename.trim(), "UTF-8");
+        System.out.print(filename);
         InputStream fis = cephObjectControl.downloadFile("testbucket", "kingfou", path);
 
+        if (fis==null){
+            return "error";
+        }
         // 将数据流交付OutputStream
         response.reset();
+        response.setContentType("application/force-download");
+        response.setHeader("content-type", "application/octet-stream");
+        response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
         int size = 1024;
         byte[] buffer = new byte[size];
@@ -268,39 +284,39 @@ public class ServiceController {
     }
 
 
-    @RequestMapping(value="/deleteFolder")
-    public String deleteFolder(Model model, Users user, String prefix,String foldName){
-        cephObjectControl.deleteFolder("testbucket","kingfou",prefix+foldName+"/");
+    @RequestMapping(value = "/deleteFolder")
+    public String deleteFolder(Model model, Users user, String prefix, String foldName) {
+        cephObjectControl.deleteFolder("testbucket", "kingfou", prefix + foldName + "/");
 
-        return showFolders(model,user,prefix);
+        return showFolders(model, user, prefix);
     }
 
-    @RequestMapping(value="/AjaxDeleteFolder")
+    @RequestMapping(value = "/AjaxDeleteFolder")
     @ResponseBody
     /**
      * preifx 路径前缀 文件夹当前所在路径。
      * foleName: 文件夹名称
      * */
-    public boolean AjaxDeleteFolder(String prefix,String foldName){
-       return cephObjectControl.deleteFolder("testbucket","kingfou",prefix+foldName+"/");
+    public boolean AjaxDeleteFolder(String prefix, String foldName) {
+        return cephObjectControl.deleteFolder("testbucket", "kingfou", prefix + foldName + "/");
     }
 
 
-    @RequestMapping(value="/deleteFile")
-    public String deleteFile(Model model,Users user, String prefix,String fileName){
-        System.out.print(prefix+fileName);
-        cephObjectControl.deleteFile("testbucket","kingfou",prefix+fileName);
-        return showFolders(model,user,prefix);
+    @RequestMapping(value = "/deleteFile")
+    public String deleteFile(Model model, Users user, String prefix, String fileName) {
+        System.out.print(prefix + fileName);
+        cephObjectControl.deleteFile("testbucket", "kingfou", prefix + fileName);
+        return showFolders(model, user, prefix);
     }
 
 
-    @RequestMapping(value="/AjaxDeleteFile")
+    @RequestMapping(value = "/AjaxDeleteFile")
     @ResponseBody
     /**
      * path ：文件的全路径名称。 /test/subtest/xxx.xxx
      * */
-    public boolean AjaxDeleteFile(String path){
-        return cephObjectControl.deleteFile("testbucket","kingfou",path);
+    public boolean AjaxDeleteFile(String path) {
+        return cephObjectControl.deleteFile("testbucket", "kingfou", path);
 
     }
 

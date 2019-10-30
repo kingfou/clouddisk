@@ -11,6 +11,7 @@ public class DemonApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DemonApplication.class, args);
+        System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow","|{}");
     }
 }
 
