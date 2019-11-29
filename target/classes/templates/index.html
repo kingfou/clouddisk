@@ -45,6 +45,7 @@
             color: #fff;
         }
     </style>
+
     <script type="text/javascript">
         $(function () {
             $('tbody>tr').click(function () {
@@ -72,9 +73,9 @@
             $(".popover-options a").popover({html: true});
         });
     </script>
-    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body>
 <!-- Side Navbar -->
@@ -128,7 +129,7 @@
                     </a></div>
                     <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
 
-                        <li class="nav-item"><a href="login.html" class="nav-link logout"> <span
+                        <li class="nav-item"><a href="/home/logOut" class="nav-link logout"> <span
                                 class="d-none d-sm-inline-block">Logout</span><i class="fa fa-sign-out"></i></a></li>
                     </ul>
                 </div>
@@ -186,11 +187,20 @@
                     %>
                     <tr>
                         <th scope="row"><input type="checkbox"/></th>
-                        <td><a href="/home/showfolders?path=/${folder.name}/">${folder.name}</a></td>
+                        <td><a href="/home/showfolders?path=${prefix}${folder.name}/">${folder.name}</a></td>
                         <td>${folder.uploaddate}</td>
-                        <td>${folder.size} Kb</td>
+                        <td>${folder.size}</td>
                         <td><input type="button" value="down" disabled="disabled"/></td>
-                        <td><input type="button" value="Del"/></td>
+                        <td>
+                            <!--<form action="/home/deleteFolder" >-->
+                                <!--<input type="" name="foldName" value="${folder.name}"/>-->
+                                <!--<input type="" name="prefix" value="${prefix}"/>-->
+                                <!--&lt;!&ndash;<input type="submit" value="Del"/>&ndash;&gt;-->
+                                <!---->
+                            <!--</form>-->
+                            <a  href="#"  data-toggle="modal"
+                                   data-target="#delFolder" onclick="udpate_modal('${folder.name}','${prefix}')"> <button>Del</button></a>
+                        </td>
                     </tr>
                     <%
                     }
@@ -198,15 +208,30 @@
 
                     <!--无目录文件-->
                     <%
-                    for(folder in noInFoldFiles){
+                    for(file in noInFoldFiles){
                     %>
                     <tr>
                         <th scope="row"><input type="checkbox"/></th>
-                        <td>${folder.name}</td>
-                        <td>${folder.uploaddate}</td>
-                        <td>${folder.size} Kb</td>
-                        <td><input type="button" value="down"/></td>
-                        <td><input type="button" value="Del"/></td>
+                        <td>${file.name}</td>
+                        <td>${file.uploaddate}</td>
+                        <td>${file.size/1000} Kb</td>
+                        <td>
+
+                            <form method="post" action="/home/downloadFile">
+                                <input value="${prefix}${file.name}" name="path" type="hidden"/>
+                                <input value="${file.name}" name="filename" type="hidden"/>
+                                <input  type="submit" value="down" />
+                            </form>
+                        </td>
+                        <td>
+                            <!--<form method="post" action="/home/deleteFile">-->
+                                <!--<input value="${prefix}" name="prefix" type="hidden"/>-->
+                                <!--<input value="${file.name}" name="fileName" type="hidden"/>-->
+                                <!--<input  type="submit" value="Del" />-->
+                            <!--</form>-->
+                            <a  href="#"  data-toggle="modal"
+                                data-target="#delFile" onclick="udpate_modal_file('${file.name}','${prefix}')"> <button>Del</button></a>
+                        </td>
                     </tr>
                     <%
                     }
@@ -217,7 +242,7 @@
 
 
         </div>
-        <div class="mx-auto bg-warning" style="width:600px">
+        <div class="mx-auto bg-warning" style="width:200px">
             <ul class="pagination" id="pagination">
             </ul>
         </div>
@@ -264,29 +289,30 @@
                         上传文件
                     </h4>
                 </div>
-                <form id="upload-form" action="/home/uploadfile" method="post" enctype="multipart/form-data">
+                <form id="uploadFile-form" action="/home/uploadfile" method="post" enctype="multipart/form-data">
 
                     <div class="modal-body">
-                        <form id="upload-form" action="/home/uploadfile" method="post"
-                              enctype="multipart/form-data">
+
+
                             <input type="file" id="upload" name="uploadfile"/>
                             <input type="hidden" name="userId" value=${user.userId}>
-                            <input type="submit" value="上传">
-                        </form>
+                            <input type="hidden" name="prefix" value=${prefix}>
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">
-                            关闭</button>
-                            <input class="btn btn-primary" type="submit" value="上传">
+                            关闭
+                        </button>
+                        <input type="submit" value="上传" class="btn btn-default">
 
                     </div>
                 </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
-
-
-    <div class="modal fade" id="createFile" tabindex="-1" role="dialog" aria-labelledby="createFileLable"
+    <!--delete folder modal-->
+    <div class="modal fade" id="delFolder" tabindex="-1" role="dialog" aria-labelledby="delFolderLabel"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -294,25 +320,63 @@
                     <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                       &times;
                     </button> -->
-                    <h4 class="modal-title" id="createFileLable">
-                        新建文件
+                    <h4 class="modal-title" id="delFolderLabel">
+                        删除文件夹
                     </h4>
                 </div>
-                <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
+                <form id="upload-form" action="/home/deleteFolder" method="post" enctype="multipart/form-data">
 
                     <div class="modal-body">
-                        　　输入文件名字：　<input id="upload" name="upload"/>
+
+                        <input type="text" style="display: none" id ="modaldel"  name="foldName" /> <br>
+                        <input type="text"  style="display: none" id="modalprefix" name="prefix"/>
+                        是否要删除该文件夹(文件夹下的内容也会被删除)？
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            关闭
                         </button>
+                        <input class="btn btn-primary" type="submit" value="删除">
 
-                        <input class="btn btn-primary" type="submit" value="提交"/>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
+    <!--delete file modal-->
+    <div class="modal fade" id="delFile" tabindex="-1" role="dialog" aria-labelledby="delFileLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                      &times;
+                    </button> -->
+                    <h4 class="modal-title" id="delFileLabel">
+                        删除文件
+                    </h4>
+                </div>
+                <form id="upload-form" action="/home/deleteFile" method="post" enctype="multipart/form-data">
+
+                    <div class="modal-body">
+
+                        <input type="text" style="display: none" id ="modalfiledel"  name="fileName" /> <br>
+                        <input type="text" style="display: none" id="modalfileprefix" name="prefix"/>
+                        是否要删除该文件？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            关闭
+                        </button>
+                        <input class="btn btn-primary" type="submit" value="删除">
+
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
     <div class="modal fade" id="createFold" tabindex="-1" role="dialog" aria-labelledby="createFoldLable"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -325,10 +389,11 @@
                         新建文件夹
                     </h4>
                 </div>
-                <form id="upload-Fold" action="#" method="post" enctype="multipart/form-data">
+                <form id="upload-Fold" action="/home/createFolder" method="post" enctype="multipart/form-data">
 
                     <div class="modal-body">
-                        　　输入文件夹名字：　<input id="foldName" name="upload"/>
+                        　　输入文件夹名字：　<input id="foldName" name="foldName"/>
+                        　　                   <input id="prefix" name="prefix" value="${prefix}" type="hidden"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭
@@ -355,16 +420,31 @@
         </div>
 
 
-
     </footer>
 </div>
 
+<!--
+modal trans value
+-->
+<script>
+    function udpate_modal(folder_name, prefix) {
+        $("#modaldel").val(folder_name);
+        $("#modalprefix").val(prefix);
+    }
+    function udpate_modal_file(file_name, prefix) {
+        $("#modalfiledel").val(file_name);
+        $("#modalfileprefix").val(prefix);
+    }
+</script>
+<!--
+pagination
+-->
 <script>
     $(function () {
         window.pagObj = $('#pagination').twbsPagination({
-            totalPages: 30,
-            visiblePages: 10,
-            startPage:1,
+            totalPages: 2,
+            visiblePages: 1,
+            startPage: 1,
             onPageClick: function (event, page) {
 
             }
@@ -372,13 +452,12 @@
 
         });
     });
-
 </script>
 
 <!-- JavaScript files-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/popper.js/umd/popper.min.js"></script>
- <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
 <!-- add new js -->
 <script src="/js/jquery.twbsPagination.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

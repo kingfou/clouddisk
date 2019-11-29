@@ -96,9 +96,12 @@ public class ServiceController {
     public String showFolders(Model model, Users user, String path) {
         user.setUserId(1);
 
-        //for test
-        if (path == null || "".equals(path)) path = "/";
 
+        if (path == null || "".equals(path)) {path = "/";}else{
+            path = path.replace("%20"," ");
+        }
+
+        System.out.println(path);
 
         //上一次请求中 文件的前缀记录  用于文件的全限定名称。
         String prefix = path;
@@ -106,7 +109,7 @@ public class ServiceController {
         JSONObject jsonObject = cephObjectControl.listAllFoldersAndFiles("testbucket", "kingfou", path);
         String tips = "tips";
         String result = jsonObject.getString("return");
-        System.out.print(result);
+
         JSONArray folderArray = (JSONArray) jsonObject.get("folderArray");
         JSONArray fileArray = (JSONArray) jsonObject.get("fileArray");
 
@@ -119,7 +122,7 @@ public class ServiceController {
         model.addAttribute("allfolders", allfolders);
         model.addAttribute("noInFoldFiles", noInFoldFiles);
         model.addAttribute("user", user);
-        model.addAttribute("prefix", prefix);
+        model.addAttribute("prefix", prefix.replace(" ","%20"));
         return "index";
     }
 
@@ -170,9 +173,12 @@ public class ServiceController {
             // get file information
             String file_name = file.getOriginalFilename();
             // save the file to Ceph server
+
+            prefix = prefix.replace("%20"," ");//手动转义
             boolean result = cephObjectControl.uploadFile("testbucket", "kingfou", prefix + file_name, file.getInputStream());
             System.out.print(result);
         }
+        System.out.println("upload..."+prefix);
         return showFolders(model, user, prefix);
 
     }
@@ -199,7 +205,7 @@ public class ServiceController {
 
     }
 
-    @RequestMapping(value = "/downloadFile",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/downloadFile", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     /**
      * path : 文件的全路径。 /test/xxx.xxx
@@ -208,11 +214,12 @@ public class ServiceController {
 
     public String downloadFile(HttpServletResponse response, String path, String filename) throws Exception {
 
-        //获取文件的全路径：
+        //手动转义
+        path = path.replace("%20"," ");
 
-        if("".equals(filename)||filename==null) {
-            String [] subpath = path.split("/");
-            filename=subpath[subpath.length-1];
+        if ("".equals(filename) || filename == null) {
+            String[] subpath = path.split("/");
+            filename = subpath[subpath.length - 1];
             System.out.print(filename);
         }
 
@@ -220,7 +227,7 @@ public class ServiceController {
         System.out.print(filename);
         InputStream fis = cephObjectControl.downloadFile("testbucket", "kingfou", path);
 
-        if (fis==null){
+        if (fis == null) {
             return "error";
         }
         // 将数据流交付OutputStream
@@ -228,7 +235,7 @@ public class ServiceController {
         response.setContentType("application/force-download");
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
+        response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(filename,"utf-8"));
         int size = 1024;
         byte[] buffer = new byte[size];
         OutputStream fiss = response.getOutputStream();
@@ -305,6 +312,7 @@ public class ServiceController {
     @RequestMapping(value = "/deleteFile")
     public String deleteFile(Model model, Users user, String prefix, String fileName) {
         System.out.print(prefix + fileName);
+        prefix = prefix.replace("%20"," ");
         cephObjectControl.deleteFile("testbucket", "kingfou", prefix + fileName);
         return showFolders(model, user, prefix);
     }

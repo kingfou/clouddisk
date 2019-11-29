@@ -84,7 +84,7 @@ public class BeetlConf {
     @Bean(name = "datasource")
     public DataSource getDataSource() {
         return DataSourceBuilder.create()
-                .url("jdbc:mysql://125.216.241.66:3306/clouddisk?" +
+                .url("jdbc:mysql://125.216.241.104:3306/clouddisk?" +
                         "useUnicode=true" +
                         "&useJDBCCompliantTimezoneShift=true" +
                         "useSSL=false"+
